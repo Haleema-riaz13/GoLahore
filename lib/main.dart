@@ -41,27 +41,23 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
 
-    // Initialize the animation controller for entry effects
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2000),
     );
 
-    // Define the fade-in animation
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeIn),
     );
 
-    // Define the subtle zoom-out scale animation
     _scaleAnimation = Tween<double>(begin: 1.1, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutSine),
     );
 
-    // Start entry animations
     _controller.forward();
 
-    // Timer to replace splash screen with display screen after 5 seconds
-    Timer(const Duration(seconds: 5), () {
+    // UPDATED: Timer duration changed to 6 seconds (5s loading + 1s stay at 100%)
+    Timer(const Duration(seconds: 6), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -79,7 +75,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   void dispose() {
-    // Clean up controller to prevent memory leaks
     _controller.dispose();
     super.dispose();
   }
@@ -90,7 +85,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Background image with scaling and fade animations
           AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
@@ -109,7 +103,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             },
           ),
 
-          // Gradient overlay for better text readability
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -133,7 +126,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 80),
-                  // App Title: GO
                   FadeTransition(
                     opacity: _fadeAnimation,
                     child: Text(
@@ -145,7 +137,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       ),
                     ),
                   ),
-                  // App Title: LAHORE
                   FadeTransition(
                     opacity: _fadeAnimation,
                     child: Text(
@@ -164,7 +155,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Tagline
                         Text(
                           'Explore. Experience. Love the Living City.✨❤️',
                           style: GoogleFonts.poppins(
@@ -174,50 +164,61 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         ),
                         const SizedBox(height: 30),
 
-                        // Circular Loading bar that fills over 5 seconds
-                        Center(
-                          child: Column(
-                            children: [
-                              TweenAnimationBuilder<double>(
-                                tween: Tween<double>(begin: 0.0, end: 1.0),
-                                duration: const Duration(seconds: 5),
-                                builder: (context, value, child) {
-                                  return Stack(
-                                    alignment: Alignment.center,
+                        // UPDATED: Plain Matte Loading Bar (No Shine, No Gradient)
+                        TweenAnimationBuilder<double>(
+                          tween: Tween<double>(begin: 0.0, end: 1.0),
+                          duration: const Duration(seconds: 5),
+                          builder: (context, value, child) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 6, // Slightly thinner for cleaner look
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Stack(
                                     children: [
-                                      // Static background circle
-                                      CircularProgressIndicator(
-                                        value: 1.0,
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white10),
-                                        strokeWidth: 4,
-                                      ),
-                                      // Dynamic progress circle
-                                      CircularProgressIndicator(
-                                        value: value,
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-                                        strokeWidth: 4,
-                                      ),
-                                      // Display percentage text
-                                      Text(
-                                        "${(value * 100).toInt()}%",
-                                        style: const TextStyle(fontSize: 10, color: Colors.white54),
+                                      // Plain Solid Progress Fill
+                                      FractionallySizedBox(
+                                        widthFactor: value,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            color: Colors.orange.shade700, // Solid Plain Color
+                                          ),
+                                        ),
                                       ),
                                     ],
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 15),
-                              // Loading status text
-                              Text(
-                                "Loading Experience...",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  color: Colors.orange.withOpacity(0.8),
-                                  letterSpacing: 1.2,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                                const SizedBox(height: 12),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Loading Experience...",
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 11,
+                                        color: Colors.white38,
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${(value * 100).toInt()}%",
+                                      style: GoogleFonts.spaceMono(
+                                        fontSize: 12,
+                                        color: Colors.orange.shade700,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
                         ),
                         const SizedBox(height: 60),
                       ],

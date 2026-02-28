@@ -10,7 +10,7 @@ class DisplayScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        // Transition added here to navigate to SelectLanguageScreen on tap
+        // Transition to navigate to SelectLanguageScreen on tap
         onTap: () {
           Navigator.of(context).push(
             createSmoothRoute(const SelectLanguageScreen()),
@@ -18,7 +18,7 @@ class DisplayScreen extends StatelessWidget {
         },
         child: Stack(
           children: [
-            // Background Image with a fallback color in case of error
+            // Background Image
             Positioned.fill(
               child: Image.asset(
                 'assets/mosque.jpg',
@@ -27,7 +27,7 @@ class DisplayScreen extends StatelessWidget {
               ),
             ),
 
-            // Dark Gradient Overlay for improved text contrast
+            // Dark Gradient Overlay
             const GradientOverlay(color: Colors.black, opacity: 0.3, endOpacity: 0.6),
 
             SafeArea(
@@ -35,7 +35,7 @@ class DisplayScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 80),
 
-                  // Professional Logo with Focused Bus Icon and Shadow Effects
+                  // Professional Logo Section
                   Center(
                     child: Container(
                       height: 120,
@@ -44,38 +44,32 @@ class DisplayScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xff3d82cd).withOpacity(0.4),
-                            blurRadius: 40,
-                            spreadRadius: 5,
+                            // Shadow brightness kam kar di gayi hai
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 20,
+                            spreadRadius: 2,
                           ),
                         ],
                       ),
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          // Outer Glassmorphism Layer
+                          // UPDATED: Outer Circle - Simple Flat Orange (No Gradient)
                           Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Colors.white.withOpacity(0.6),
-                                  Colors.white.withOpacity(0.1),
-                                ],
-                              ),
+                              color: const Color(0xFFE67E22), // Simple Flat Orange
                               border: Border.all(
-                                color: Colors.white.withOpacity(0.4),
-                                width: 1.5,
+                                color: Colors.white.withOpacity(0.8),
+                                width: 2.5,
                               ),
                             ),
                           ),
-                          // Inner Icon: High-impact Bus Icon
+                          // Inner Bus Icon - Now White
                           const Icon(
                             Icons.directions_bus_rounded,
-                            size: 80,
-                            color: Color(0xff1a237e),
+                            size: 75,
+                            color: Colors.white,
                           ),
                         ],
                       ),
@@ -83,10 +77,10 @@ class DisplayScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 32),
-                  // App Title with Border effect
+                  // App Title
                   const BorderedTitle(title: "GO LAHORE"),
                   const SizedBox(height: 15),
-                  // App Subtitle / Description
+                  // App Subtitle
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 50),
                     child: Text(

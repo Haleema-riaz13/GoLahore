@@ -331,7 +331,7 @@ class _RouteResultScreenState extends State<RouteResultScreen> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
           padding: const EdgeInsets.symmetric(vertical: 15),
         ),
-        child: Text(_t("نیویگیشن شروع کریں", "Navigation Start Karein", "START NAVIGATION"), style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+        child: Text(_t("سفر شروع کریں", "TRIP Start Karein", "START TRIP"), style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
       ),
     );
   }

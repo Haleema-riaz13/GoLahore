@@ -15,13 +15,29 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // State to manage password visibility toggle
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+
   bool _isPasswordHidden = true;
+
+  bool get _isFormValid => _emailController.text.isNotEmpty && _passController.text.isNotEmpty;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.addListener(() => setState(() {}));
+    _passController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // --- Translation Logic ---
-    // Default English strings
     String title = "LOGIN";
     String subtitle = "on GoLahore";
     String emailHint = "Email or phone";
@@ -32,7 +48,6 @@ class _LoginScreenState extends State<LoginScreen> {
     String signupText = "Sign up";
     String mainBtn = "LOGIN";
 
-    // Urdu translations
     if (widget.language == "Urdu") {
       title = "لاگ ان";
       subtitle = "گو لاہور پر";
@@ -43,9 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
       noAccount = "اکاؤنٹ نہیں ہے؟ ";
       signupText = "سائن اپ کریں";
       mainBtn = "لاگ ان";
-    }
-    // Roman Urdu translations
-    else if (widget.language == "Roman Urdu") {
+    } else if (widget.language == "Roman Urdu") {
       title = "LOGIN";
       subtitle = "GoLahore par";
       emailHint = "Email ya phone";
@@ -59,7 +72,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      // Adjust layout when keyboard appears to prevent overflow
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -71,9 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Stack(
         children: [
-          // Background Layer: Themed image
           Positioned.fill(child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover)),
-          // Gradient Overlay: Enhances text readability over the background image
           const GradientOverlay(color: Colors.black, opacity: 0.4, endOpacity: 0.85),
 
           SafeArea(
@@ -82,7 +92,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   return SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ConstrainedBox(
-                      // Ensures content spans at least the full screen height
                       constraints: BoxConstraints(minHeight: constraints.maxHeight),
                       child: IntrinsicHeight(
                         child: Column(
@@ -98,37 +107,52 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
 
                             const SizedBox(height: 50),
-                            // Email/Phone input with Glassmorphism effect
-                            GlassWrapper(child: _buildTextField(Icons.email_outlined, emailHint)),
+                            GlassWrapper(child: _buildTextField(Icons.email_outlined, emailHint, _emailController)),
                             const SizedBox(height: 20),
-                            // Password input with Glassmorphism effect
-                            GlassWrapper(child: _buildPasswordField(passHint)),
+                            GlassWrapper(child: _buildPasswordField(passHint, _passController)),
                             const SizedBox(height: 30),
 
-                            // Social Login Option
                             GestureDetector(
                               onTap: () => print("Google Sign In Clicked"),
                               child: SocialGlassTab(label: googleBtn, icon: Icons.g_mobiledata),
                             ),
                             const SizedBox(height: 25),
 
-                            // Navigation Footer (Forgot Password & Sign Up)
                             _buildFooter(context, forgotPass, noAccount, signupText),
 
                             const Spacer(),
 
                             const SizedBox(height: 20),
-                            // Main Action: Navigate to Dashboard
-                            PrimaryActionButton(
-                              label: mainBtn,
-                              onTap: () {
-                                // Dismiss keyboard before navigation
-                                FocusScope.of(context).unfocus();
 
+                            // UPDATED: LOGIN Button with PLAIN ORANGE color
+                            GestureDetector(
+                              onTap: _isFormValid ? () {
+                                FocusScope.of(context).unfocus();
                                 Navigator.of(context).pushReplacement(
                                   createSmoothRoute(SearchRoutesScreen(language: widget.language)),
                                 );
-                              },
+                              } : null,
+                              child: Opacity(
+                                opacity: _isFormValid ? 1.0 : 0.5,
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 55,
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange, // Plain Orange
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    mainBtn,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.2
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 40),
                           ],
@@ -144,11 +168,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  /// Helper to build the footer navigation links
   Widget _buildFooter(BuildContext context, String forgot, String noAcc, String signup) {
     return Column(
       children: [
-        // Navigate to Forgot Password screen
         GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -167,7 +189,6 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(noAcc, style: const TextStyle(color: Colors.white70)),
-            // Navigate to Sign Up screen
             GestureDetector(
               onTap: () {
                 FocusScope.of(context).unfocus();
@@ -184,9 +205,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  /// Helper to build standard text input fields
-  Widget _buildTextField(IconData icon, String hint) {
+  Widget _buildTextField(IconData icon, String hint, TextEditingController controller) {
     return TextField(
+        controller: controller,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Colors.white70),
@@ -198,9 +219,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  /// Helper to build password input fields with a visibility toggle
-  Widget _buildPasswordField(String hint) {
+  Widget _buildPasswordField(String hint, TextEditingController controller) {
     return TextField(
+        controller: controller,
         obscureText: _isPasswordHidden,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(

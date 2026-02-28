@@ -14,17 +14,37 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   // State to manage password visibility toggle
   bool _isPasswordHidden = true;
 
+  // Controllers to track text changes
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+
+  // Function to check if both fields are filled
+  bool get _isFormValid => _emailController.text.isNotEmpty && _passController.text.isNotEmpty;
+
+  @override
+  void initState() {
+    super.initState();
+    // Re-build UI when text changes to update button state
+    _emailController.addListener(() => setState(() {}));
+    _passController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // --- Translation Logic ---
-    // Default English strings
     String title = "RESET PASSWORD";
     String emailHint = "Email or phone";
     String newPassHint = "New Password";
     String confirmBtn = "RESET PASSWORD";
     String backToLogin = "Back to Login";
 
-    // Urdu translations
     if (widget.language == "Urdu") {
       title = "پاس ورڈ دوبارہ ترتیب دیں";
       emailHint = "ای میل یا فون نمبر";
@@ -32,7 +52,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       confirmBtn = "پاس ورڈ تبدیل کریں";
       backToLogin = "لاگ ان پر واپس جائیں";
     }
-    // Roman Urdu translations
     else if (widget.language == "Roman Urdu") {
       title = "RESET PASSWORD";
       emailHint = "Email ya phone";
@@ -43,7 +62,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      // Automatically adjust layout when the keyboard appears to prevent overflows
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -51,7 +69,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
               onPressed: () {
-                // Dismiss keyboard before navigating back
                 FocusScope.of(context).unfocus();
                 Navigator.pop(context);
               }
@@ -59,9 +76,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
       body: Stack(
         children: [
-          // Background Layer: Themed image
           Positioned.fill(child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover)),
-          // Gradient Overlay: Ensures text remains readable over the background
           const GradientOverlay(color: Colors.black, opacity: 0.4, endOpacity: 0.85),
 
           SafeArea(
@@ -70,7 +85,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   return SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ConstrainedBox(
-                      // Ensures the content takes at least the full height of the screen
                       constraints: BoxConstraints(minHeight: constraints.maxHeight),
                       child: IntrinsicHeight(
                         child: Column(
@@ -83,35 +97,49 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ),
                             const SizedBox(height: 50),
 
-                            // Input Fields with Glassmorphism effect
-                            GlassWrapper(child: _buildField(Icons.person_outline, emailHint)),
+                            // Added Controllers to fields
+                            GlassWrapper(child: _buildField(Icons.person_outline, emailHint, _emailController)),
                             const SizedBox(height: 20),
-                            GlassWrapper(child: _buildPasswordField(newPassHint)),
+                            GlassWrapper(child: _buildPasswordField(newPassHint, _passController)),
 
                             const SizedBox(height: 40),
 
-                            // Action Button: Triggers password reset logic
-                            PrimaryActionButton(
-                              label: confirmBtn,
-                              onTap: () {
-                                // Dismiss keyboard on action
+                            // UPDATED: RESET PASSWORD Button with validation logic
+                            GestureDetector(
+                              onTap: _isFormValid ? () {
                                 FocusScope.of(context).unfocus();
-
-                                // Visual feedback for user
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(widget.language == "Urdu" ? "پاس ورڈ تبدیل کر دیا گیا ہے" : "Password reset successful!"))
                                 );
                                 Navigator.pop(context);
-                              },
+                              } : null, // Disables click if form is not valid
+                              child: Opacity(
+                                opacity: _isFormValid ? 1.0 : 0.5, // Faded if not clickable
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 55,
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    confirmBtn,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.2
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
 
-                            // Pushes the footer to the bottom of the screen
                             const Spacer(),
 
-                            // Navigation back to login
                             TextButton(
                               onPressed: () {
-                                // Dismiss keyboard before navigating back
                                 FocusScope.of(context).unfocus();
                                 Navigator.pop(context);
                               },
@@ -131,9 +159,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  /// Helper to build standard text input fields
-  Widget _buildField(IconData icon, String hint) {
+  // Updated with controller
+  Widget _buildField(IconData icon, String hint, TextEditingController controller) {
     return TextField(
+        controller: controller,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Colors.white70),
@@ -145,9 +174,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  /// Helper to build password input fields with visibility toggle
-  Widget _buildPasswordField(String hint) {
+  // Updated with controller
+  Widget _buildPasswordField(String hint, TextEditingController controller) {
     return TextField(
+        controller: controller,
         obscureText: _isPasswordHidden,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(

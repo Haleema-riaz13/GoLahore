@@ -5,26 +5,23 @@ import 'login_screen.dart';
 import 'signup_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
-  final String language; // Stores the language preference passed from SelectLanguageScreen
+  final String language;
 
   const WelcomeScreen({super.key, this.language = "English"});
 
   @override
   Widget build(BuildContext context) {
-    // Default English string initializations
     String welcomeText = "WELCOME";
     String subtitleText = "Smart travel,\nmade for Lahore";
     String loginBtn = "LOGIN";
     String signupBtn = "Create an account";
 
-    // Urdu language localization
     if (language == "Urdu") {
       welcomeText = "خوش آمدید";
       subtitleText = "لاہور کے لیے بہترین\nسمارٹ سفر";
       loginBtn = "لاگ ان";
       signupBtn = "نیا اکاؤنٹ بنائیں";
     }
-    // Roman Urdu language localization
     else if (language == "Roman Urdu") {
       welcomeText = "WELCOME";
       subtitleText = "Smart travel,\nLahore ke liye";
@@ -36,7 +33,6 @@ class WelcomeScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // 1. Background Layer: High-quality themed image for the landing experience
           Positioned.fill(
             child: Image.asset(
               'assets/train.jpg',
@@ -45,7 +41,6 @@ class WelcomeScreen extends StatelessWidget {
             ),
           ),
 
-          // 2. Visual Layer: Dark Gradient Overlay to ensure text legibility
           const GradientOverlay(
               color: Colors.black,
               opacity: 0.3,
@@ -55,7 +50,6 @@ class WelcomeScreen extends StatelessWidget {
           SafeArea(
             child: Column(
               children: [
-                // Top Navigation: Back button to return to language selection
                 Padding(
                   padding: const EdgeInsets.only(top: 10, left: 10),
                   child: Row(
@@ -76,7 +70,6 @@ class WelcomeScreen extends StatelessWidget {
                       children: [
                         const Spacer(flex: 2),
 
-                        // 3. Branding: Main Welcome Title
                         Text(
                           welcomeText,
                           textAlign: TextAlign.center,
@@ -88,7 +81,6 @@ class WelcomeScreen extends StatelessWidget {
                           ),
                         ),
 
-                        // 4. Branding: Underlined Subtitle for value proposition
                         Text(
                           subtitleText,
                           textAlign: TextAlign.center,
@@ -103,7 +95,7 @@ class WelcomeScreen extends StatelessWidget {
 
                         const Spacer(flex: 3),
 
-                        // 5. User Action: LOGIN BUTTON (Utilizing custom smooth transition)
+                        // LOGIN BUTTON with Orange click effect
                         SizedBox(
                           width: double.infinity,
                           height: 55,
@@ -116,6 +108,12 @@ class WelcomeScreen extends StatelessWidget {
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(color: Colors.white, width: 1.5),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            ).copyWith(
+                              // UPDATED: Jab click/press karein to Orange ho jaye
+                              backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+                                if (states.contains(WidgetState.pressed)) return Colors.orangeAccent;
+                                return null;
+                              }),
                             ),
                             child: Text(
                               loginBtn,
@@ -131,7 +129,7 @@ class WelcomeScreen extends StatelessWidget {
 
                         const SizedBox(height: 15),
 
-                        // 6. User Action: SIGN UP BUTTON (Utilizing custom smooth transition)
+                        // SIGN UP BUTTON with Orange click effect
                         SizedBox(
                           width: double.infinity,
                           height: 55,
@@ -144,6 +142,12 @@ class WelcomeScreen extends StatelessWidget {
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(color: Colors.white, width: 1.5),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            ).copyWith(
+                              // UPDATED: Jab click/press karein to Orange ho jaye
+                              backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+                                if (states.contains(WidgetState.pressed)) return Colors.orangeAccent;
+                                return null;
+                              }),
                             ),
                             child: Text(
                               signupBtn,

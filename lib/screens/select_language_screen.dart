@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_ui.dart';
 import '../utils/transitions.dart';
-import 'welcome_screen.dart';
+import 'user_mode_screen.dart';
 
 class SelectLanguageScreen extends StatefulWidget {
   const SelectLanguageScreen({super.key});
@@ -35,12 +35,20 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 60),
-                  // App Branding: Language Icon header
-                  const CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.blueAccent,
-                    child: Icon(Icons.language, color: Colors.white, size: 40),
+
+                  // UPDATED: App Branding - Orange Icon with White Outline
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 3), // White Outline
+                    ),
+                    child: const CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.orangeAccent, // Orange Background
+                      child: Icon(Icons.language, color: Colors.white, size: 40),
+                    ),
                   ),
+
                   const SizedBox(height: 30),
                   const Text(
                     "Select Language",
@@ -65,27 +73,24 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
 
                   const Spacer(),
 
-                  // Action Button: Navigates to the next screen upon language selection
+                  // Action Button
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: selectedLang != "" ? Colors.blueAccent : Colors.grey.shade800,
+                        backgroundColor: selectedLang != "" ? Colors.orangeAccent : Colors.grey.shade800,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
-                      // Navigation Logic: Passes the selected language string to WelcomeScreen
                       onPressed: selectedLang != ""
                           ? () {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => WelcomeScreen(language: selectedLang),
-                          ),
+                          createSmoothRoute(UserModeScreen(language: selectedLang)),
                         );
                       }
-                          : null, // Button remains disabled until a selection is made
+                          : null,
                       child: const Text(
                         "CONTINUE",
                         style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2),
@@ -108,7 +113,6 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
 
     return GestureDetector(
       onTap: () {
-        // Update the state to reflect the user's choice
         setState(() {
           selectedLang = title;
         });
@@ -117,17 +121,17 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blueAccent.withOpacity(0.15) : const Color(0xFF1E1E1E),
+          color: isSelected ? Colors.orangeAccent.withOpacity(0.15) : const Color(0xFF1E1E1E),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? Colors.blueAccent : Colors.white10,
+            color: isSelected ? Colors.orangeAccent : Colors.white10,
             width: 1.5,
           ),
         ),
         child: Row(
           children: [
             CircleAvatar(
-              backgroundColor: isSelected ? Colors.blueAccent : Colors.white10,
+              backgroundColor: isSelected ? Colors.orangeAccent : Colors.white10,
               child: Icon(icon, color: isSelected ? Colors.white : Colors.white60, size: 20),
             ),
             const SizedBox(width: 15),
@@ -145,9 +149,8 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
               ],
             ),
             const Spacer(),
-            // Radio-style icon to show selection status
             if (isSelected)
-              const Icon(Icons.check_circle, color: Colors.blueAccent, size: 24)
+              const Icon(Icons.check_circle, color: Color(0xFFE67E22), size: 24)
             else
               const Icon(Icons.circle_outlined, color: Colors.white24, size: 24),
           ],

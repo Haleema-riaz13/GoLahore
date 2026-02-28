@@ -13,14 +13,50 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  // Controllers to track input changes
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+  final TextEditingController _confirmPassController = TextEditingController();
+
   // State variables to manage password visibility toggles
   bool _isPasswordHidden = true;
   bool _isConfirmPasswordHidden = true;
 
+  // Validation Logic: Checks if all fields are filled
+  bool get _isFormValid {
+    return _nameController.text.isNotEmpty &&
+        _emailController.text.isNotEmpty &&
+        _phoneController.text.isNotEmpty &&
+        _passController.text.isNotEmpty &&
+        _confirmPassController.text.isNotEmpty;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Listeners to rebuild UI when user types
+    _nameController.addListener(() => setState(() {}));
+    _emailController.addListener(() => setState(() {}));
+    _phoneController.addListener(() => setState(() {}));
+    _passController.addListener(() => setState(() {}));
+    _confirmPassController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _passController.dispose();
+    _confirmPassController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // --- Translation Logic ---
-    // Default English strings
     String title = "Sign Up";
     String subtitle = "on GoLahore";
     String nameHint = "Name";
@@ -31,7 +67,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     String confirmPassHint = "Confirm Password";
     String mainBtn = "SIGN UP";
 
-    // Urdu translations
     if (widget.language == "Urdu") {
       title = "سائن اپ";
       subtitle = "گو لاہور پر";
@@ -42,9 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       createPassHint = "پاس ورڈ بنائیں";
       confirmPassHint = "پاس ورڈ کی تصدیق کریں";
       mainBtn = "سائن اپ";
-    }
-    // Roman Urdu translations
-    else if (widget.language == "Roman Urdu") {
+    } else if (widget.language == "Roman Urdu") {
       title = "Sign Up";
       subtitle = "GoLahore par";
       nameHint = "Naam";
@@ -58,81 +91,83 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      // Ensures the layout adjusts correctly when the keyboard appears
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-              onPressed: () => Navigator.pop(context) // Go back to the previous screen
+              onPressed: () => Navigator.pop(context)
           )
       ),
       body: Stack(
         children: [
-          // Background Layer: Themed image
           Positioned.fill(child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover)),
-          // Gradient Overlay: Ensures text is readable over the background
           const GradientOverlay(color: Colors.black, opacity: 0.5, endOpacity: 0.8),
-
           SafeArea(
             child: LayoutBuilder(
               builder: (context, constraints) => SingleChildScrollView(
-                // Physics enabled to ensure smooth scrolling during keyboard interaction
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: ConstrainedBox(
-                  // Forces the scrollable area to take at least the full screen height
                   constraints: BoxConstraints(minHeight: constraints.maxHeight),
                   child: IntrinsicHeight(
                     child: Column(
                       children: [
                         const SizedBox(height: 10),
 
-                        Text(
-                            title,
-                            style: const TextStyle(color: Colors.white, fontSize: 44, fontWeight: FontWeight.bold)
-                        ),
-                        Text(
-                            subtitle,
-                            style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w300)
-                        ),
+                        Text(title, style: const TextStyle(color: Colors.white, fontSize: 44, fontWeight: FontWeight.bold)),
+                        Text(subtitle, style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w300)),
 
                         const SizedBox(height: 30),
-                        // Input fields wrapped in Glassmorphism style
-                        GlassWrapper(child: _buildField(Icons.person_outline, nameHint)),
+                        GlassWrapper(child: _buildField(Icons.person_outline, nameHint, _nameController)),
                         const SizedBox(height: 12),
-                        GlassWrapper(child: _buildField(Icons.email_outlined, emailHint)),
+                        GlassWrapper(child: _buildField(Icons.email_outlined, emailHint, _emailController)),
                         const SizedBox(height: 12),
-                        GlassWrapper(child: _buildField(Icons.phone_outlined, phoneHint)),
+                        GlassWrapper(child: _buildField(Icons.phone_outlined, phoneHint, _phoneController)),
                         const SizedBox(height: 25),
-
                         Align(
                             alignment: Alignment.centerLeft,
                             child: Text(passInstruction, style: const TextStyle(color: Colors.white60, fontSize: 12))
                         ),
                         const SizedBox(height: 5),
-
-                        // Password fields with visibility toggles
-                        GlassWrapper(child: _buildPasswordField(createPassHint, _isPasswordHidden, (val) => setState(() => _isPasswordHidden = val))),
+                        GlassWrapper(child: _buildPasswordField(createPassHint, _isPasswordHidden, _passController, (val) => setState(() => _isPasswordHidden = val))),
                         const SizedBox(height: 12),
-                        GlassWrapper(child: _buildPasswordField(confirmPassHint, _isConfirmPasswordHidden, (val) => setState(() => _isConfirmPasswordHidden = val))),
+                        GlassWrapper(child: _buildPasswordField(confirmPassHint, _isConfirmPasswordHidden, _confirmPassController, (val) => setState(() => _isConfirmPasswordHidden = val))),
 
-                        // Spacer pushes the button to the bottom while allowing scroll space
                         const Spacer(),
 
                         const SizedBox(height: 20),
-                        // Main Action: Dismisses keyboard and navigates to the Dashboard
-                        PrimaryActionButton(
-                          label: mainBtn,
-                          onTap: () {
-                            // Dismiss the keyboard automatically
-                            FocusScope.of(context).unfocus();
 
+                        // UPDATED: SIGN UP Button with PLAIN ORANGE color and Validation
+                        GestureDetector(
+                          onTap: _isFormValid ? () {
+                            FocusScope.of(context).unfocus();
                             Navigator.of(context).pushReplacement(
                               createSmoothRoute(SearchRoutesScreen(language: widget.language)),
                             );
-                          },
+                          } : null,
+                          child: Opacity(
+                            opacity: _isFormValid ? 1.0 : 0.5,
+                            child: Container(
+                              width: double.infinity,
+                              height: 55,
+                              decoration: BoxDecoration(
+                                color: Colors.orange, // Plain Orange
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                mainBtn,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.2
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 40),
                       ],
@@ -147,9 +182,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  /// Helper widget to build standard text input fields
-  Widget _buildField(IconData icon, String hint) {
+  Widget _buildField(IconData icon, String hint, TextEditingController controller) {
     return TextField(
+        controller: controller,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Colors.white70),
@@ -161,9 +196,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  /// Helper widget to build password input fields with toggleable visibility
-  Widget _buildPasswordField(String hint, bool isHidden, Function(bool) onToggle) {
+  Widget _buildPasswordField(String hint, bool isHidden, TextEditingController controller, Function(bool) onToggle) {
     return TextField(
+        controller: controller,
         obscureText: isHidden,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
