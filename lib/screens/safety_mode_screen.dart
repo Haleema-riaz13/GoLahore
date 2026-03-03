@@ -4,12 +4,12 @@ import '../utils/transitions.dart';
 import 'help_support_screen.dart';
 
 class SafetyModeScreen extends StatelessWidget {
-  final String language; // Holds the current language state passed from previous screens
+  final String language; // Holds the current language state passed from previous screens (English, Urdu, or Roman Urdu)
 
   const SafetyModeScreen({super.key, this.language = "English"});
 
   // --- Translation Helper ---
-  // Returns the appropriate string based on the current language selection
+  // Returns the appropriate string based on the current language selection state
   String _t(String ur, String ro, String en) {
     if (language == "Urdu") return ur;
     if (language == "Roman Urdu") return ro;
@@ -25,7 +25,7 @@ class SafetyModeScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context), // Go back to the previous screen
+          onPressed: () => Navigator.pop(context), // Pops the current screen to return to the previous one
         ),
         title: Text(
           _t("حفاظتی موڈ", "Safety Mode", "Safety Mode"),
@@ -34,7 +34,7 @@ class SafetyModeScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          // Background Layer: Themed mosque image with low opacity
+          // Background Layer: Themed mosque image with low opacity for branding consistency
           Positioned.fill(
             child: Opacity(
               opacity: 0.1,
@@ -46,10 +46,10 @@ class SafetyModeScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Interactive SOS Button
+                // Interactive SOS Button: High-priority trigger for emergency signals
                 GestureDetector(
                   onTap: () {
-                    // Triggers a visual confirmation when the emergency signal is "sent"
+                    // Triggers a visual confirmation via SnackBar when the emergency signal is "sent"
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(_t("ہنگامی SOS سگنل بھیج دیا گیا!", "Emergency SOS Signal bhej diya gaya!", "Emergency SOS Signal Sent!")),
@@ -61,7 +61,7 @@ class SafetyModeScreen extends StatelessWidget {
                     width: 180,
                     height: 180,
                     decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(0.2),
+                      color: Colors.red.withOpacity(0.2), // Outer glowing ring
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.redAccent, width: 2),
                     ),
@@ -70,7 +70,7 @@ class SafetyModeScreen extends StatelessWidget {
                         width: 140,
                         height: 140,
                         decoration: const BoxDecoration(
-                          color: Colors.redAccent,
+                          color: Colors.redAccent, // Solid inner button
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(color: Colors.red, blurRadius: 20, spreadRadius: 5)
@@ -91,7 +91,7 @@ class SafetyModeScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 40),
-                // SOS Guidance Text
+                // SOS Guidance Text: Prominent heading and descriptive instruction
                 Text(
                   _t("کیا آپ کسی مشکل میں ہیں؟", "Kya aap emergency mein hain?", "Are you in an emergency?"),
                   style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
@@ -106,13 +106,13 @@ class SafetyModeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 50),
 
-                // Secondary Safety Actions
+                // Secondary Safety Actions: Modular components for location sharing and contacts
                 _buildSafetyAction(
                   icon: Icons.share_location,
                   label: _t("لائیو لوکیشن شیئر کریں", "Live Location Share Karein", "Share Live Location"),
                   color: Colors.blueAccent,
                   onTap: () {
-                    // Placeholder for location sharing logic
+                    // Logic placeholder for starting a live location sharing session
                   },
                 ),
                 const SizedBox(height: 15),
@@ -121,7 +121,7 @@ class SafetyModeScreen extends StatelessWidget {
                   label: _t("ہنگامی رابطے", "Emergency Contacts", "Emergency Contacts"),
                   color: Colors.greenAccent,
                   onTap: () {
-                    // Navigate to Help & Support screen while passing the current language
+                    // Navigation logic to the Help & Support module, passing the language state
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -136,7 +136,7 @@ class SafetyModeScreen extends StatelessWidget {
                   label: _t("قریبی پولیس اسٹیشن کال کریں", "Nearest Police ko call karein", "Call Nearest Police Station"),
                   color: Colors.orangeAccent,
                   onTap: () {
-                    // Placeholder for phone dialer logic
+                    // Logic placeholder for triggering the system's phone dialer
                   },
                 ),
               ],
@@ -147,20 +147,20 @@ class SafetyModeScreen extends StatelessWidget {
     );
   }
 
-  /// Helper widget to build consistent action rows for safety features
+  /// Helper widget to build consistent action rows for safety features to ensure UI uniformity
   Widget _buildSafetyAction({required IconData icon, required String label, required Color color, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
         decoration: BoxDecoration(
-          color: const Color(0xFF1E1E1E),
+          color: const Color(0xFF1E1E1E), // Dark card surface for high contrast
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: Colors.white10),
         ),
         child: Row(
           children: [
-            Icon(icon, color: color),
+            Icon(icon, color: color), // Color-coded icon for quick identification
             const SizedBox(width: 15),
             Text(
               label,

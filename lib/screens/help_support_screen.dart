@@ -3,12 +3,12 @@ import '../widgets/custom_ui.dart';
 import '../utils/transitions.dart';
 
 class HelpSupportScreen extends StatelessWidget {
-  final String language; // Holds the current application language state
+  final String language; // Holds the current application language state (English, Urdu, or Roman Urdu)
 
   const HelpSupportScreen({super.key, this.language = "English"});
 
   // --- Translation Helper Method ---
-  // Selects the appropriate string based on the provided language parameter
+  // Selects the appropriate string based on the provided language parameter to support localization
   String _t(String ur, String ro, String en) {
     if (language == "Urdu") return ur;
     if (language == "Roman Urdu") return ro;
@@ -24,7 +24,7 @@ class HelpSupportScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context), // Navigation back to previous screen
+          onPressed: () => Navigator.pop(context), // Pops the current route to return to the previous screen
         ),
         title: Text(
           _t("مدد اور سپورٹ", "Help & Support", "Help & Support"),
@@ -33,7 +33,7 @@ class HelpSupportScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          // Background Layer: Consistent mosque theme with low opacity
+          // Background Layer: Consistent branding using the mosque asset at 10% opacity for a watermark effect
           Positioned.fill(
             child: Opacity(
               opacity: 0.1,
@@ -41,17 +41,18 @@ class HelpSupportScreen extends StatelessWidget {
             ),
           ),
 
-          // Content Layer: List of support services and helplines
+          // Content Layer: Scrollable list of local emergency services and app support options
           ListView(
             padding: const EdgeInsets.all(16.0),
             children: [
+              // Header for Public Emergency services in Lahore
               Text(
                 _t("لاہور ایمرجنسی ہیلپ لائنز", "Lahore Emergency Helplines", "Lahore Emergency Helplines"),
                 style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 20),
 
-              // Emergency and Transport Helpline Tiles
+              // Emergency and Transport Helpline Tiles with localized labels and real numbers
               _buildHelpTile(_t("پولیس ایمرجنسی", "Police Emergency", "Police Emergency"), "15", Icons.local_police, Colors.blue),
               _buildHelpTile(_t("ریسکیو / ایمبولینس", "Rescue / Ambulance", "Rescue / Ambulance"), "1122", Icons.medical_services, Colors.red),
               _buildHelpTile(_t("اورنج لائن میٹرو", "Orange Line Metro", "Orange Line Metro"), "042-111-222-627", Icons.train, Colors.orange),
@@ -65,13 +66,14 @@ class HelpSupportScreen extends StatelessWidget {
               const Divider(color: Colors.white10),
               const SizedBox(height: 10),
 
-              // App Specific Support Section
+              // Header for App-specific Support and Feedback
               Text(
                 _t("ایپ سپورٹ سے رابطہ کریں", "Contact App Support", "Contact App Support"),
                 style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 15),
 
+              // Digital contact channels
               _buildHelpTile(_t("ہمیں ای میل کریں", "Email Karein", "Email Us"), "support@lahoretransit.com", Icons.email, Colors.teal),
               _buildHelpTile(_t("ایپ کی خرابی رپورٹ کریں", "App Bug report karein", "Report an App Bug"), _t("رائے جمع کروائیں", "Feedback dein", "Submit Feedback"), Icons.bug_report, Colors.purpleAccent),
             ],
@@ -81,18 +83,18 @@ class HelpSupportScreen extends StatelessWidget {
     );
   }
 
-  /// Helper widget to build consistent helpline and support list tiles
+  /// Helper widget to build consistent helpline and support list tiles with standardized icons and action buttons
   Widget _buildHelpTile(String title, String subtitle, IconData icon, Color color) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: const Color(0xFF1E1E1E), // Dark card background for high contrast
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: Colors.white10),
       ),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: color.withOpacity(0.1),
+          backgroundColor: color.withOpacity(0.1), // Subtle color-coded glow for icons
           child: Icon(icon, color: color, size: 22),
         ),
         title: Text(
@@ -103,9 +105,10 @@ class HelpSupportScreen extends StatelessWidget {
           subtitle,
           style: const TextStyle(color: Colors.white54, fontSize: 13),
         ),
+        // Visual indicator that the tile is interactive (triggering a phone dialer)
         trailing: const Icon(Icons.call, color: Colors.green, size: 20),
         onTap: () {
-          // Placeholder for phone dialer or email intent logic
+          // Placeholder: Implementation for 'url_launcher' to trigger system dialer or email app
         },
       ),
     );

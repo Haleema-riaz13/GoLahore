@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'driver_dashboard.dart';
 
 class RegistrationPendingScreen extends StatelessWidget {
@@ -8,6 +7,7 @@ class RegistrationPendingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Boolean check for Urdu language support
     bool isUrdu = language == "Urdu";
 
     return Scaffold(
@@ -18,9 +18,11 @@ class RegistrationPendingScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // ERROR FIXED: onTripleTap ki jagah onLongPress istemal kiya hai
+              // --- Interactive Icon Section ---
+              // Wrapped in GestureDetector with LongPress for internal testing/preview purposes
               GestureDetector(
                 onLongPress: () {
+                  // Direct navigation to DriverDashboard to bypass the wait during development
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -37,6 +39,7 @@ class RegistrationPendingScreen extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
+                      // Continuous loading indicator representing the "Review" phase
                       const SizedBox(
                         height: 140, width: 140,
                         child: CircularProgressIndicator(
@@ -51,6 +54,7 @@ class RegistrationPendingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 50),
 
+              // --- Success/Pending Title ---
               Text(
                 isUrdu ? "درخواست موصول ہو گئی ہے" : "Application Received!",
                 textAlign: TextAlign.center,
@@ -58,6 +62,7 @@ class RegistrationPendingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
+              // --- Descriptive Guidance Text ---
               Text(
                 isUrdu
                     ? "آپ کی فراہم کردہ معلومات کی جانچ پڑتال کی جا رہی ہے۔ تصدیق مکمل ہونے پر آپ کو مطلع کر دیا جائے گا۔"
@@ -67,6 +72,7 @@ class RegistrationPendingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 40),
 
+              // --- Estimated Timeframe Banner ---
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
                 decoration: BoxDecoration(
@@ -99,6 +105,7 @@ class RegistrationPendingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 60),
 
+              // --- Primary Action Button: Reset stack to Home ---
               SizedBox(
                 width: double.infinity,
                 height: 55,
@@ -116,6 +123,7 @@ class RegistrationPendingScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 20),
+              // Hint text for developers/reviewers to navigate forward
               Text(
                 isUrdu ? "(ڈیش بورڈ دیکھنے کے لیے آئیکن کو دبا کر رکھیں)" : "(Long press icon to preview dashboard)",
                 style: const TextStyle(color: Colors.grey, fontSize: 10),

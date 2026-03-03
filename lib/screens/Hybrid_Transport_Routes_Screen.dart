@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'our_trip_screen.dart'; // Ensure correct path
+import 'our_trip_screen.dart'; // Ensure correct path for navigation
 
 class HybridTransportRoutesScreen extends StatelessWidget {
   final String language;
@@ -8,6 +8,7 @@ class HybridTransportRoutesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Boolean check to toggle Urdu strings
     bool isUrdu = language == "Urdu";
 
     return Scaffold(
@@ -16,7 +17,7 @@ class HybridTransportRoutesScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF1A1A1A),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context), // Go back to the main search/map screen
         ),
         title: Text(
           isUrdu ? "ہائبرڈ روٹس (کم پیدل)" : "Hybrid Routes (Least Walk)",
@@ -26,7 +27,7 @@ class HybridTransportRoutesScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // Route 1: DHA to Railway Station (Rickshaw + Orange Line)
+          // --- Route Option 1: Rickshaw for First Mile + Orange Line for Long Distance ---
           _buildHybridCard(
             context,
             title: isUrdu ? "ڈی ایچ اے سے ریلوے اسٹیشن" : "DHA to Railway Station",
@@ -34,14 +35,14 @@ class HybridTransportRoutesScreen extends StatelessWidget {
               {"mode": isUrdu ? "رکشہ" : "Rickshaw", "icon": Icons.electric_rickshaw, "detail": "DHA Ph 6 -> Thokar"},
               {"mode": isUrdu ? "اورنج لائن" : "Orange Line", "icon": Icons.train, "detail": "Thokar -> Station"},
             ],
-            iconsString: "🛺 + 🚆", // String for OurTripScreen detection
+            iconsString: "🛺 + 🚆", // Identifiers for the live map to draw paths
             price: "Rs. 390",
             duration: "45 min",
             color: const Color(0xFF1B4F72),
           ),
           const SizedBox(height: 16),
 
-          // Route 2: Johar Town to Arfa Tower (Bike + Metro Bus)
+          // --- Route Option 2: Bike for Quick Transit + Metro Bus for Cheap Corridor ---
           _buildHybridCard(
             context,
             title: isUrdu ? "جوہر ٹاؤن سے عرفہ ٹاور" : "Johar Town to Arfa Tower",
@@ -49,13 +50,14 @@ class HybridTransportRoutesScreen extends StatelessWidget {
               {"mode": isUrdu ? "بائیک" : "Bike", "icon": Icons.directions_bike, "detail": "J.Town -> Model Town"},
               {"mode": isUrdu ? "میٹرو بس" : "Metro Bus", "icon": Icons.directions_bus, "detail": "M.Town -> Arfa Tower"},
             ],
-            iconsString: "🏍️ + 🚌", // String for OurTripScreen detection
+            iconsString: "🏍️ + 🚌", // Identifiers for path rendering in OurTripScreen
             price: "Rs. 150",
             duration: "30 min",
             color: const Color(0xFF145A32),
           ),
 
           const SizedBox(height: 20),
+          // Descriptive footer note explaining the hybrid philosophy
           Padding(
             padding: const EdgeInsets.all(10),
             child: Text(
@@ -69,6 +71,7 @@ class HybridTransportRoutesScreen extends StatelessWidget {
     );
   }
 
+  /// Helper widget to build cards that represent multi-leg (Hybrid) journeys
   Widget _buildHybridCard(
       BuildContext context, {
         required String title,
@@ -90,10 +93,11 @@ class HybridTransportRoutesScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Localized Route Heading
           Text(title, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 20),
 
-          // Visual Step Connector
+          // --- Visual Step Connector: Renders icons with a horizontal divider between them ---
           Row(
             children: [
               for (int i = 0; i < steps.length; i++) ...[
@@ -104,6 +108,7 @@ class HybridTransportRoutesScreen extends StatelessWidget {
                     Text(steps[i]['mode'] as String, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                   ],
                 ),
+                // Draw a connecting line between modes if it's not the last one in the list
                 if (i < steps.length - 1)
                   const Expanded(
                     child: Padding(
@@ -116,7 +121,7 @@ class HybridTransportRoutesScreen extends StatelessWidget {
           ),
 
           const SizedBox(height: 15),
-          // Detail Descriptions
+          // Textual descriptions for each leg of the hybrid journey
           for (var step in steps)
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
@@ -130,6 +135,7 @@ class HybridTransportRoutesScreen extends StatelessWidget {
             ),
 
           const Divider(color: Colors.white10, height: 30),
+          // Price and Time summary footer for the card
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -149,6 +155,7 @@ class HybridTransportRoutesScreen extends StatelessWidget {
           ),
 
           const SizedBox(height: 15),
+          // Navigation trigger to start the live trip tracking
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -158,6 +165,7 @@ class HybridTransportRoutesScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               onPressed: () {
+                // Navigate to OurTripScreen, passing the combined icons string for map pathing
                 Navigator.push(
                   context,
                   MaterialPageRoute(

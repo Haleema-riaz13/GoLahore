@@ -4,19 +4,19 @@ import '../utils/transitions.dart';
 import 'search_routes_screen.dart';
 
 class TripCompletionScreen extends StatelessWidget {
-  final String price;    // Displays the fare or savings amount
+  final String price;    // Displays the fare or savings amount calculated during the trip
   final String time;     // Displays the total time taken for the journey
-  final String language; // Holds the current application language state
+  final String language; // Holds the current application language state (English, Urdu, or Roman Urdu)
 
   const TripCompletionScreen({
     super.key,
     required this.price,
     required this.time,
-    this.language = "English", // Defaulting to English if no parameter is passed
+    this.language = "English", // Defaulting to English if no parameter is passed from the previous screen
   });
 
-  // --- Translation Helper ---
-  // Returns the appropriate string literal based on the selected language
+  // --- Translation Helper Method ---
+  // Returns the appropriate string literal based on the selected language state
   String _t(String ur, String ro, String en) {
     if (language == "Urdu") return ur;
     if (language == "Roman Urdu") return ro;
@@ -28,11 +28,12 @@ class TripCompletionScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Layer: Themed mosque image
+          // Background Layer: Themed image of a mosque to maintain branding consistency
           Positioned.fill(
             child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover),
           ),
-          // Dark Overlay: Applied for better text contrast and readability
+
+          // Dark Overlay: Applied for better text contrast and to make the summary card "pop"
           Positioned.fill(
             child: Container(color: Colors.black.withOpacity(0.6)),
           ),
@@ -41,15 +42,14 @@ class TripCompletionScreen extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 60),
-                // Screen Title with celebration emoji
+                // Screen Title: Dynamic text based on language selection
                 Text(
                   _t("سفر مکمل 🎉", "Trip Mukammal 🎉", "Trip Complete 🎉"),
                   style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 40),
 
-                // Summary Card using Glassmorphism design principles
-
+                // Summary Card using Glassmorphism design principles (Translucent background with borders)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Container(
@@ -61,7 +61,7 @@ class TripCompletionScreen extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        // Displaying Trip Summary metrics
+                        // Displaying Trip Summary metrics: Time, Savings, and Reward points
                         _buildSummaryRow(Icons.timer_outlined, _t("صرف شدہ وقت", "Time laga", "Time taken"), time),
                         const SizedBox(height: 25),
                         _buildSummaryRow(Icons.account_balance_wallet_outlined, _t("بچت", "Fare bacha", "Fare saved"), price),
@@ -69,11 +69,11 @@ class TripCompletionScreen extends StatelessWidget {
                         _buildSummaryRow(Icons.emoji_events_outlined, _t("بیج", "AI badge", "AI badge"), "100 pts"),
                         const SizedBox(height: 30),
 
-                        // User Feedback/Rating Section
+                        // User Feedback/Rating Section with a small map thumbnail
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(_t("رائے دیں ⭐", "Rate karein ⭐", "Rate trip ⭐"), style: const TextStyle(color: Colors.white)),
+                            Text(_t("رائے دیں ⭐⭐⭐⭐⭐", "Rate karein ⭐⭐⭐⭐⭐", "Rate trip ⭐⭐⭐⭐⭐"), style: const TextStyle(color: Colors.white)),
                             ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Container(
@@ -90,7 +90,7 @@ class TripCompletionScreen extends StatelessWidget {
                 ),
                 const Spacer(),
 
-                // Confirmation Button: Returns user to the Dashboard
+                // Final Confirmation Button: Clears history and returns user to the main Search/Dashboard
                 Padding(
                   padding: const EdgeInsets.only(left: 40, right: 40, bottom: 40),
                   child: SizedBox(
@@ -103,7 +103,7 @@ class TripCompletionScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 15),
                       ),
                       onPressed: () {
-                        // Resets navigation stack and returns to the search screen with persistence
+                        // pushAndRemoveUntil ensures the user cannot "Go Back" to the completed trip screen
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => SearchRoutesScreen(language: language)),
@@ -125,7 +125,7 @@ class TripCompletionScreen extends StatelessWidget {
     );
   }
 
-  /// Helper widget to build consistent summary data rows with icons
+  /// Helper widget to build consistent summary data rows with icons and vertical text stacking
   Widget _buildSummaryRow(IconData icon, String label, String value) {
     return Row(
       children: [

@@ -11,26 +11,27 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  // State to manage password visibility toggle
+  // State variable to manage the toggle between showing and hiding the password
   bool _isPasswordHidden = true;
 
-  // Controllers to track text changes
+  // Controllers to listen to and control the text input in the fields
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
-  // Function to check if both fields are filled
+  // Computed property to determine if the user has provided input in both fields
   bool get _isFormValid => _emailController.text.isNotEmpty && _passController.text.isNotEmpty;
 
   @override
   void initState() {
     super.initState();
-    // Re-build UI when text changes to update button state
+    // Re-build the UI whenever the user types to update the "Reset" button's enabled state
     _emailController.addListener(() => setState(() {}));
     _passController.addListener(() => setState(() {}));
   }
 
   @override
   void dispose() {
+    // Standard memory management: dispose controllers when the screen is destroyed
     _emailController.dispose();
     _passController.dispose();
     super.dispose();
@@ -38,7 +39,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // --- Translation Logic ---
+    // --- Localized String Configuration ---
     String title = "RESET PASSWORD";
     String emailHint = "Email or phone";
     String newPassHint = "New Password";
@@ -61,14 +62,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     }
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: true,
+      extendBodyBehindAppBar: true, // Allows the background asset to fill the status bar area
+      resizeToAvoidBottomInset: true, // Ensures the layout shifts when the keyboard is visible
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
               onPressed: () {
+                // Dismiss the keyboard before navigating back
                 FocusScope.of(context).unfocus();
                 Navigator.pop(context);
               }
@@ -76,7 +78,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
       body: Stack(
         children: [
+          // Background layer with the app's signature mosque visual
           Positioned.fill(child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover)),
+          // Overlay to darken the background for better text contrast
           const GradientOverlay(color: Colors.black, opacity: 0.4, endOpacity: 0.85),
 
           SafeArea(
@@ -85,6 +89,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   return SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ConstrainedBox(
+                      // Ensures the scrollable area is at least the height of the screen
                       constraints: BoxConstraints(minHeight: constraints.maxHeight),
                       child: IntrinsicHeight(
                         child: Column(
@@ -97,24 +102,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ),
                             const SizedBox(height: 50),
 
-                            // Added Controllers to fields
+                            // Input fields wrapped in Glassmorphism style containers
                             GlassWrapper(child: _buildField(Icons.person_outline, emailHint, _emailController)),
                             const SizedBox(height: 20),
                             GlassWrapper(child: _buildPasswordField(newPassHint, _passController)),
 
                             const SizedBox(height: 40),
 
-                            // UPDATED: RESET PASSWORD Button with validation logic
+                            // Main Action: RESET PASSWORD Button
                             GestureDetector(
+                              // Only triggers if the form validation passes
                               onTap: _isFormValid ? () {
                                 FocusScope.of(context).unfocus();
+                                // Feedback to user on successful reset
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text(widget.language == "Urdu" ? "پاس ورڈ تبدیل کر دیا گیا ہے" : "Password reset successful!"))
                                 );
                                 Navigator.pop(context);
-                              } : null, // Disables click if form is not valid
+                              } : null, // null disables the tap event
                               child: Opacity(
-                                opacity: _isFormValid ? 1.0 : 0.5, // Faded if not clickable
+                                opacity: _isFormValid ? 1.0 : 0.5, // Visual feedback for disabled state
                                 child: Container(
                                   width: double.infinity,
                                   height: 55,
@@ -136,8 +143,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               ),
                             ),
 
-                            const Spacer(),
+                            const Spacer(), // Pushes the secondary button to the bottom
 
+                            // Link to return to the Login screen
                             TextButton(
                               onPressed: () {
                                 FocusScope.of(context).unfocus();
@@ -159,7 +167,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  // Updated with controller
+  /// Helper method for building standardized text input fields
   Widget _buildField(IconData icon, String hint, TextEditingController controller) {
     return TextField(
         controller: controller,
@@ -174,7 +182,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  // Updated with controller
+  /// Helper method for building password input fields with visibility toggles
   Widget _buildPasswordField(String hint, TextEditingController controller) {
     return TextField(
         controller: controller,

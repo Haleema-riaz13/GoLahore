@@ -13,11 +13,11 @@ class RouteResultScreen extends StatefulWidget {
 }
 
 class _RouteResultScreenState extends State<RouteResultScreen> {
-  // Toggle state for the 'Fastest' category between Bike and Car options
+  // Toggle state to switch between 'Bike' and 'Car' inside the Fastest category
   String selectedFastestOption = "Bike";
 
   // --- Translation Helper Method ---
-  // Returns the appropriate string based on the current language parameter
+  // Centralized logic to return strings based on the language state passed to the widget
   String _t(String ur, String ro, String en) {
     if (widget.language == "Urdu") return ur;
     if (widget.language == "Roman Urdu") return ro;
@@ -30,7 +30,7 @@ class _RouteResultScreenState extends State<RouteResultScreen> {
       backgroundColor: const Color(0xFF121212),
       body: Stack(
         children: [
-          // Background Layer: Mosque themed image with low opacity for branding
+          // Background Branding Layer: Low-opacity mosque image for visual continuity
           Positioned.fill(
             child: Opacity(
               opacity: 0.3,
@@ -41,7 +41,7 @@ class _RouteResultScreenState extends State<RouteResultScreen> {
           SafeArea(
             child: Column(
               children: [
-                // Custom Navigation Bar area
+                // Header Navigation: Includes a back button and localized screen title
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: Row(
@@ -58,12 +58,12 @@ class _RouteResultScreenState extends State<RouteResultScreen> {
                   ),
                 ),
 
-                // Main Scrollable List displaying different travel options
+                // Main Content Area: A list of travel options categorized by user priorities
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     children: [
-                      // --- OPTION 1: CHEAPEST (Optimized for cost) ---
+                      // --- OPTION 1: CHEAPEST (Multi-modal Public Transport) ---
                       _buildResultCard(
                         context,
                         title: _t("سب سے سستا", "Sabse Sasta", "Cheapest"),
@@ -85,12 +85,12 @@ class _RouteResultScreenState extends State<RouteResultScreen> {
                       ),
                       const SizedBox(height: 15),
 
-                      // --- OPTION 2: FASTEST (Optimized for time, dynamic toggle) ---
+                      // --- OPTION 2: FASTEST (Interactive Private Transport Toggle) ---
                       _buildFastestResultCard(),
 
                       const SizedBox(height: 15),
 
-                      // --- OPTION 3: LEAST WALKING (Optimized for comfort/rain) ---
+                      // --- OPTION 3: LEAST WALKING (Comfort/Weather Optimized) ---
                       _buildResultCard(
                         context,
                         title: _t("کم پیدل سفر", "Kam Paidal", "Least walking"),
@@ -119,11 +119,11 @@ class _RouteResultScreenState extends State<RouteResultScreen> {
     );
   }
 
-  /// Specialized card for 'Fastest' results featuring a Bike/Car toggle
+  /// Builds the 'Fastest' travel card which allows users to switch between Bike and Car
   Widget _buildFastestResultCard() {
     bool isBike = selectedFastestOption == "Bike";
 
-    // Dynamic data binding based on Bike vs Car selection
+    // Dynamic data assignment based on the currently selected toggle (Bike or Car)
     String price = isBike
         ? _t("150 روپے", "Rs 150", "Rs 150")
         : _t("450 روپے", "Rs 450", "Rs 450");
@@ -162,7 +162,7 @@ class _RouteResultScreenState extends State<RouteResultScreen> {
           ),
           const SizedBox(height: 15),
 
-          // Toggle buttons for Bike or Car selection
+          // Horizontal toggle group for switching vehicle types
           Row(
             children: [
               _buildSelectionButton(_t("بائیک", "Bike", "Bike"), isBike, "Bike"),
@@ -204,7 +204,7 @@ class _RouteResultScreenState extends State<RouteResultScreen> {
     );
   }
 
-  /// Builder for the toggle buttons (Bike/Car)
+  /// Helper to create individual toggle buttons for the vehicle selection row
   Widget _buildSelectionButton(String label, bool isSelected, String optionKey) {
     return Expanded(
       child: GestureDetector(
@@ -229,7 +229,7 @@ class _RouteResultScreenState extends State<RouteResultScreen> {
     );
   }
 
-  /// Generic card builder for standard travel results (Cheapest, Least Walking)
+  /// Generic card builder used for 'Cheapest' and 'Least Walking' categories
   Widget _buildResultCard(
       BuildContext context, {
         required String title,
@@ -286,7 +286,7 @@ class _RouteResultScreenState extends State<RouteResultScreen> {
               ),
             ],
           ),
-          // Conditional UI element for rainy weather optimization
+          // Conditional UI block: Displays weather optimization advice if the route is 'Rain Optimized'
           if (isRainOptimized) ...[
             const SizedBox(height: 15),
             Row(
@@ -305,13 +305,13 @@ class _RouteResultScreenState extends State<RouteResultScreen> {
     );
   }
 
-  /// Triggers the actual navigation flow to the 'OurTripScreen'
+  /// Main action button that transitions the user from viewing results to active trip tracking
   Widget _buildNavigationButton(String mode, String icons, String price, String time) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          // Pass all route data to the live trip tracking screen
+          // Navigates to the live tracking screen while passing the specific route data
           Navigator.push(
             context,
             MaterialPageRoute(

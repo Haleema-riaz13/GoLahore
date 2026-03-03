@@ -8,13 +8,14 @@ class RiderFoundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determine if the UI should display Urdu strings
     bool isUrdu = language == "Urdu";
 
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
       body: Stack(
         children: [
-          // Background Map (Simulation)
+          // Background Layer: A map asset with reduced opacity to emphasize the foreground panel
           Positioned.fill(
             child: Opacity(
               opacity: 0.5,
@@ -22,7 +23,7 @@ class RiderFoundScreen extends StatelessWidget {
             ),
           ),
 
-          // Bottom Rider Info Panel
+          // Bottom Rider Info Panel: Contains all driver and vehicle details
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -35,7 +36,7 @@ class RiderFoundScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Rider Arrival Status
+                  // Status Row: Displays arrival time and localized status message
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -48,7 +49,7 @@ class RiderFoundScreen extends StatelessWidget {
                   ),
                   const Divider(color: Colors.white10, height: 30),
 
-                  // Rider Profile Section
+                  // Rider Profile Section: Displays driver name, rating, and vehicle plate
                   Row(
                     children: [
                       const CircleAvatar(
@@ -75,12 +76,14 @@ class RiderFoundScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
+                          // Vehicle Number Plate Styling
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                             decoration: BoxDecoration(color: const Color(0xFFFFD700), borderRadius: BorderRadius.circular(8)),
                             child: const Text("LEC-4592", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                           ),
                           const SizedBox(height: 5),
+                          // Dynamic Vehicle Model naming based on vehicleType
                           Text(vehicleType == "Car" ? "White Corolla" : (vehicleType == "Bike" ? "Honda CD-70" : "Auto Rickshaw"),
                               style: const TextStyle(color: Colors.white54, fontSize: 12)),
                         ],
@@ -89,7 +92,7 @@ class RiderFoundScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
 
-                  // Action Buttons (Call / Message)
+                  // Action Buttons: Quick triggers for communication
                   Row(
                     children: [
                       _actionBtn(Icons.message, isUrdu ? "پیغام" : "Message", Colors.white12, Colors.white),
@@ -99,7 +102,7 @@ class RiderFoundScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
 
-                  // Cancel Ride
+                  // Secondary Action: Allows the user to cancel the ride
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(isUrdu ? "سفر منسوخ کریں" : "Cancel Trip", style: const TextStyle(color: Colors.redAccent)),
@@ -113,6 +116,7 @@ class RiderFoundScreen extends StatelessWidget {
     );
   }
 
+  /// Helper widget to build consistent communication buttons (Call/Message)
   Widget _actionBtn(IconData icon, String label, Color bg, Color iconCol) {
     return Expanded(
       child: Container(

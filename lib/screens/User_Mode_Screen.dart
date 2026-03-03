@@ -12,15 +12,20 @@ class UserModeScreen extends StatefulWidget {
 }
 
 class _UserModeScreenState extends State<UserModeScreen> {
+  // Local state to track which mode is selected and the loading status
   String selectedMode = "";
   bool isLoading = false;
 
+  // Function to handle the transition after clicking Continue
   void _handleContinue() async {
     setState(() => isLoading = true);
-    await Future.delayed(const Duration(seconds: 2)); // Loading Delay
+
+    // Simulating a network or processing delay for better UX
+    await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
     setState(() => isLoading = false);
 
+    // Navigation logic based on the selected role
     if (selectedMode == "Passenger") {
       Navigator.pushReplacement(context, createSmoothRoute(WelcomeScreen(language: widget.language)));
     } else {
@@ -30,7 +35,7 @@ class _UserModeScreenState extends State<UserModeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Translation Logic exactly as per screenshot
+    // Localization logic for UI strings based on the passed language
     String title = widget.language == "Urdu" ? "اپنا کردار منتخب کریں" : "Choose Your Role";
     String subtitle = widget.language == "Urdu"
         ? "آپ گو لاہور کو کیسے استعمال کرنا چاہیں گے؟"
@@ -45,7 +50,7 @@ class _UserModeScreenState extends State<UserModeScreen> {
       backgroundColor: const Color(0xFF121212),
       body: Stack(
         children: [
-          // Background Mosque Image with very low opacity
+          // Subtle background image of a mosque at 15% opacity
           Positioned.fill(
               child: Opacity(
                   opacity: 0.15,
@@ -58,7 +63,7 @@ class _UserModeScreenState extends State<UserModeScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 60),
-                  // Top Icon with white border as per screenshot
+                  // App Branding: Location Pin inside a bordered circle
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
@@ -68,7 +73,7 @@ class _UserModeScreenState extends State<UserModeScreen> {
                     child: const CircleAvatar(
                         radius: 45,
                         backgroundColor: Colors.orangeAccent,
-                        child: Icon(Icons.location_on, color: Colors.white, size: 45) // Screenshot mein location pin hai
+                        child: Icon(Icons.location_on, color: Colors.white, size: 45)
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -84,13 +89,13 @@ class _UserModeScreenState extends State<UserModeScreen> {
                   ),
                   const SizedBox(height: 50),
 
-                  // Tiles with Subtitles
+                  // Mode Selection Tiles
                   _buildModeTile(passengerTitle, passengerSub, Icons.directions_bus, "Passenger"),
                   _buildModeTile(driverTitle, driverSub, Icons.directions_car, "Driver"),
 
                   const Spacer(),
 
-                  // Continue Button
+                  // Action Button: Disabled if no mode is selected
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -118,6 +123,7 @@ class _UserModeScreenState extends State<UserModeScreen> {
     );
   }
 
+  // Helper widget to create a consistent look for the Passenger/Driver options
   Widget _buildModeTile(String title, String sub, IconData icon, String modeKey) {
     bool isSelected = selectedMode == modeKey;
     return GestureDetector(
@@ -126,6 +132,7 @@ class _UserModeScreenState extends State<UserModeScreen> {
         margin: const EdgeInsets.only(bottom: 20),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
+          // Logic: Highlight the tile if it is the currently selected one
           color: isSelected ? Colors.orangeAccent.withOpacity(0.12) : const Color(0xFF1E1E1E),
           borderRadius: BorderRadius.circular(25),
           border: Border.all(
@@ -153,6 +160,7 @@ class _UserModeScreenState extends State<UserModeScreen> {
                 ],
               ),
             ),
+            // Radio-style icon to show selection state visually
             Icon(
               isSelected ? Icons.check_circle : Icons.circle_outlined,
               color: isSelected ? Colors.orangeAccent : Colors.white24,

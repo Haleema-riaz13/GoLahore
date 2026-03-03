@@ -13,18 +13,18 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  // Controllers to track input changes
+  // --- Controllers to track input changes in real-time ---
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _confirmPassController = TextEditingController();
 
-  // State variables to manage password visibility toggles
+  // --- State variables to manage password visibility toggles ---
   bool _isPasswordHidden = true;
   bool _isConfirmPasswordHidden = true;
 
-  // Validation Logic: Checks if all fields are filled
+  // --- Validation Logic: Returns true only if all fields have text ---
   bool get _isFormValid {
     return _nameController.text.isNotEmpty &&
         _emailController.text.isNotEmpty &&
@@ -36,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    // Listeners to rebuild UI when user types
+    // Attach listeners to controllers so the UI rebuilds (enabling/disabling the button) as the user types
     _nameController.addListener(() => setState(() {}));
     _emailController.addListener(() => setState(() {}));
     _phoneController.addListener(() => setState(() {}));
@@ -46,6 +46,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void dispose() {
+    // Memory Management: Always dispose controllers when the screen is removed from the widget tree
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
@@ -56,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // --- Translation Logic ---
+    // --- Translation Logic for UI Labels ---
     String title = "Sign Up";
     String subtitle = "on GoLahore";
     String nameHint = "Name";
@@ -90,8 +91,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: true,
+      extendBodyBehindAppBar: true, // Allows the background image to show behind the transparent AppBar
+      resizeToAvoidBottomInset: true, // Automatically adjusts the screen when the keyboard pops up
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -102,14 +103,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
       body: Stack(
         children: [
+          // Background layer
           Positioned.fill(child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover)),
+          // Gradient overlay to ensure text visibility
           const GradientOverlay(color: Colors.black, opacity: 0.5, endOpacity: 0.8),
+
           SafeArea(
             child: LayoutBuilder(
               builder: (context, constraints) => SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: ConstrainedBox(
+                  // Forces the scroll view to at least be the size of the screen
                   constraints: BoxConstraints(minHeight: constraints.maxHeight),
                   child: IntrinsicHeight(
                     child: Column(
@@ -120,29 +125,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Text(subtitle, style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w300)),
 
                         const SizedBox(height: 30),
+                        // Text input fields wrapped in a Glassmorphism effect
                         GlassWrapper(child: _buildField(Icons.person_outline, nameHint, _nameController)),
                         const SizedBox(height: 12),
                         GlassWrapper(child: _buildField(Icons.email_outlined, emailHint, _emailController)),
                         const SizedBox(height: 12),
                         GlassWrapper(child: _buildField(Icons.phone_outlined, phoneHint, _phoneController)),
                         const SizedBox(height: 25),
+
                         Align(
                             alignment: Alignment.centerLeft,
                             child: Text(passInstruction, style: const TextStyle(color: Colors.white60, fontSize: 12))
                         ),
                         const SizedBox(height: 5),
+
+                        // Password inputs with toggleable visibility
                         GlassWrapper(child: _buildPasswordField(createPassHint, _isPasswordHidden, _passController, (val) => setState(() => _isPasswordHidden = val))),
                         const SizedBox(height: 12),
                         GlassWrapper(child: _buildPasswordField(confirmPassHint, _isConfirmPasswordHidden, _confirmPassController, (val) => setState(() => _isConfirmPasswordHidden = val))),
 
-                        const Spacer(),
-
+                        const Spacer(), // Pushes the button to the bottom of the screen
                         const SizedBox(height: 20),
 
-                        // UPDATED: SIGN UP Button with PLAIN ORANGE color and Validation
+                        // SIGN UP Button: Updates opacity and interactivity based on _isFormValid
                         GestureDetector(
                           onTap: _isFormValid ? () {
-                            FocusScope.of(context).unfocus();
+                            FocusScope.of(context).unfocus(); // Closes keyboard before navigating
                             Navigator.of(context).pushReplacement(
                               createSmoothRoute(SearchRoutesScreen(language: widget.language)),
                             );
@@ -153,7 +161,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               width: double.infinity,
                               height: 55,
                               decoration: BoxDecoration(
-                                color: Colors.orange, // Plain Orange
+                                color: Colors.orange, // Plain Orange as requested
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               alignment: Alignment.center,
@@ -182,6 +190,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  // --- Helper to build standard text input fields ---
   Widget _buildField(IconData icon, String hint, TextEditingController controller) {
     return TextField(
         controller: controller,
@@ -196,6 +205,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  // --- Helper to build password fields with eye-toggle visibility ---
   Widget _buildPasswordField(String hint, bool isHidden, TextEditingController controller, Function(bool) onToggle) {
     return TextField(
         controller: controller,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'driver_dashboard.dart';
 
 class DriverDashboard extends StatefulWidget {
   final String language;
@@ -9,6 +10,7 @@ class DriverDashboard extends StatefulWidget {
 }
 
 class _DriverDashboardState extends State<DriverDashboard> {
+  // Boolean state to track if the driver is currently active and looking for rides
   bool isOnline = false;
 
   @override
@@ -16,11 +18,11 @@ class _DriverDashboardState extends State<DriverDashboard> {
     bool isUrdu = widget.language == "Urdu";
 
     return Scaffold(
-      // Side Menu (Drawer) jahan Profile aur History hogi
+      // Side Navigation Menu: Intended for Profile, History, and Wallet management
       drawer: const Drawer(),
       body: Stack(
         children: [
-          // 1. MAP SECTION (Placeholder)
+          // 1. MAP SECTION: Serving as a placeholder for the live GPS tracking background
           Container(
             color: Colors.grey.shade200,
             width: double.infinity,
@@ -30,7 +32,7 @@ class _DriverDashboardState extends State<DriverDashboard> {
             ),
           ),
 
-          // 2. TOP STATS BAR (Earnings & Rating)
+          // 2. TOP STATS BAR: Quick-glance metrics for daily earnings and user rating
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -44,7 +46,7 @@ class _DriverDashboardState extends State<DriverDashboard> {
             ),
           ),
 
-          // 3. BOTTOM CONTROL PANEL
+          // 3. BOTTOM CONTROL PANEL: Main interaction area for toggling driver status
           Positioned(
             bottom: 0,
             left: 0,
@@ -62,7 +64,7 @@ class _DriverDashboardState extends State<DriverDashboard> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Status Text
+                  // Status Text: Dynamic color and label changes based on online status
                   Text(
                     isOnline
                         ? (isUrdu ? "آپ آن لائن ہیں" : "YOU ARE ONLINE")
@@ -82,7 +84,7 @@ class _DriverDashboardState extends State<DriverDashboard> {
                   ),
                   const SizedBox(height: 25),
 
-                  // Big Toggle Button
+                  // Big Toggle Button: Using AnimatedContainer for smooth color transitions
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -127,7 +129,7 @@ class _DriverDashboardState extends State<DriverDashboard> {
     );
   }
 
-  // Stat Cards banane ke liye helper widget
+  /// Helper widget to build consistent stat cards with icons and stacked text
   Widget _buildTopStat(String label, String value, IconData icon) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),

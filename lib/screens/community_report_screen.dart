@@ -12,11 +12,11 @@ class CommunityReportScreen extends StatefulWidget {
 }
 
 class _CommunityReportScreenState extends State<CommunityReportScreen> {
-  // Stores the currently selected reporting category
+  // Stores the currently selected reporting category to highlight the UI
   String selectedIssue = "";
 
   // --- Translation Helper Method ---
-  // Returns the appropriate string based on the current language parameter
+  // Returns the appropriate string based on the current language parameter passed from the parent
   String _t(String ur, String ro, String en) {
     if (widget.language == "Urdu") return ur;
     if (widget.language == "Roman Urdu") return ro;
@@ -25,7 +25,7 @@ class _CommunityReportScreenState extends State<CommunityReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Dynamic labels initialized based on the selected language
+    // Dynamic labels initialized based on the selected language for localized UI
     String mainTitle = _t("کمیونٹی\nرپورٹس", "Community\nReports", "Community\nReports");
     String submitBtn = _t("جمع کریں", "Submit", "Submit");
     String appTitle = _t("کمیونٹی رپورٹ", "Community Report", "Community Report");
@@ -37,13 +37,13 @@ class _CommunityReportScreenState extends State<CommunityReportScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context), // Navigates back to the previous dashboard/map
         ),
         title: Text(appTitle, style: const TextStyle(color: Colors.white, fontSize: 16)),
       ),
       body: Stack(
         children: [
-          // Background Layer: Themed image with low opacity for better readability
+          // Background Layer: Themed mosque image with 30% opacity to maintain branding without distracting
           Positioned.fill(
             child: Opacity(
               opacity: 0.3,
@@ -54,7 +54,7 @@ class _CommunityReportScreenState extends State<CommunityReportScreen> {
             ),
           ),
 
-          // Content Layer: Centralized reporting panel
+          // Content Layer: Centralized reporting panel with a translucent glass-style background
           Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 0.85,
@@ -67,6 +67,7 @@ class _CommunityReportScreenState extends State<CommunityReportScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Localized Heading
                   Text(
                     mainTitle,
                     textAlign: TextAlign.center,
@@ -78,7 +79,7 @@ class _CommunityReportScreenState extends State<CommunityReportScreen> {
                   ),
                   const SizedBox(height: 30),
 
-                  // List of interactive reporting options
+                  // List of interactive reporting options using a helper method
                   _buildReportOption(_t("⚠️ راستہ بند ہے", "⚠️ RoadBlock", "⚠️ RoadBlock")),
                   _buildReportOption(_t("🚗 ٹریفک جام", "🚗 Traffic jam", "🚗 Traffic jam")),
                   _buildReportOption(_t("☁️ خراب موسم", "☁️ Bad weather", "☁️ Bad weather")),
@@ -87,22 +88,22 @@ class _CommunityReportScreenState extends State<CommunityReportScreen> {
 
                   const SizedBox(height: 30),
 
-                  // Submission Button Logic
+                  // Submission Button Logic: Only triggers if an issue is selected
                   GestureDetector(
                     onTap: () {
                       if (selectedIssue.isNotEmpty) {
-                        // Display success confirmation via SnackBar
+                        // Display success confirmation via SnackBar for user feedback
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text(_t("$selectedIssue رپورٹ جمع ہوگئی!", "$selectedIssue report ho gayi!", "$selectedIssue reported successfully!"))),
                         );
-                        // Navigate back to the previous screen upon successful submission
+                        // Navigate back automatically upon successful submission
                         Navigator.pop(context);
                       }
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 30),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1B85B8),
+                        color: const Color(0xFF1B85B8), // Professional blue primary button
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(color: Colors.black, width: 1.5),
                       ),
@@ -128,17 +129,18 @@ class _CommunityReportScreenState extends State<CommunityReportScreen> {
     );
   }
 
-  /// Helper widget to build individual report category buttons
+  /// Helper widget to build individual report category buttons with selection logic and visual feedback
   Widget _buildReportOption(String label) {
     bool isSelected = selectedIssue == label;
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: GestureDetector(
-        onTap: () => setState(() => selectedIssue = label), // Update UI on selection
+        onTap: () => setState(() => selectedIssue = label), // Update the state to highlight the chosen issue
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 15),
           decoration: BoxDecoration(
+            // Change color and border based on selection state
             color: isSelected ? Colors.white24 : Colors.white10,
             borderRadius: BorderRadius.circular(40),
             border: Border.all(

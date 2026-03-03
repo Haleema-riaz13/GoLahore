@@ -11,7 +11,8 @@ class PrivateTransportBookingScreen extends StatefulWidget {
 }
 
 class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingScreen> {
-  String selectedVehicle = "Car"; // Default selection
+  // Local state to manage which vehicle type is currently highlighted/selected
+  String selectedVehicle = "Car";
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +22,20 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
       backgroundColor: const Color(0xFF121212),
       body: Stack(
         children: [
-          // 1. Map Section (Background)
+          // 1. Background Layer: Interactive map visualization fixed at the top
           Positioned.fill(
-            bottom: 300,
+            bottom: 300, // Provides space for the bottom selection panel
             child: Container(
               color: Colors.grey[900],
               child: Stack(
                 children: [
                   Image.asset(
-                    'assets/map.jpg', // Make sure this asset exists
+                    'assets/map.jpg',
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
                   ),
+                  // Centered marker to indicate the user's pickup point on the map
                   const Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -54,7 +56,7 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
             ),
           ),
 
-          // 2. Back Button
+          // 2. Navigation Layer: Floating back button for user exit
           Positioned(
             top: 50,
             left: 20,
@@ -67,7 +69,7 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
             ),
           ),
 
-          // 3. Bottom Booking Panel
+          // 3. UI Control Panel: Bottom sheet containing vehicle options and booking actions
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -81,6 +83,7 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Decorative top handle for the bottom sheet design
                   Center(
                     child: Container(
                       width: 50,
@@ -95,6 +98,7 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
                   ),
                   const SizedBox(height: 15),
 
+                  // Scrollable selection list for available private transport modes
                   Expanded(
                     child: ListView(
                       children: [
@@ -106,6 +110,7 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
                   ),
 
                   const Divider(color: Colors.white10),
+                  // Secondary actions for Payment type and Promo code entry
                   Row(
                     children: [
                       const Icon(Icons.payment, color: Colors.greenAccent),
@@ -119,12 +124,13 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
                   ),
                   const SizedBox(height: 15),
 
+                  // Main CTA Button: Triggers the "Finding Driver" modal simulation
                   SizedBox(
                     width: double.infinity,
                     height: 55,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFFD700),
+                        backgroundColor: const Color(0xFFFFD700), // Brand yellow color
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                       ),
@@ -144,6 +150,7 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
     );
   }
 
+  /// Helper widget to build consistent vehicle selection tiles with border feedback
   Widget _buildVehicleOption(String key, String title, String price, IconData icon) {
     bool isSelected = selectedVehicle == key;
     return GestureDetector(
@@ -183,6 +190,7 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
     );
   }
 
+  /// Displays an asynchronous bottom sheet to simulate a network request for a rider
   void _searchingRiderSheet() {
     showModalBottomSheet(
       context: context,
@@ -190,9 +198,10 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
       isDismissible: false,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
       builder: (context) {
+        // Logic: Wait 3 seconds to simulate back-end processing then navigate forward
         Future.delayed(const Duration(seconds: 3), () {
           if (mounted) {
-            Navigator.pop(context); // Close searching sheet
+            Navigator.pop(context); // Close the search modal
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => RiderFoundScreen(
@@ -208,6 +217,7 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Spinning loader to provide visual feedback during the search
               const SizedBox(height: 60, width: 60, child: CircularProgressIndicator(color: Color(0xFFFFD700), strokeWidth: 5)),
               const SizedBox(height: 30),
               Text(
@@ -244,6 +254,7 @@ class RiderFoundScreen extends StatelessWidget {
       backgroundColor: const Color(0xFF121212),
       body: Stack(
         children: [
+          // Background layer showing the active trip map with reduced prominence
           Positioned.fill(
             child: Opacity(
               opacity: 0.5,
@@ -261,6 +272,7 @@ class RiderFoundScreen extends StatelessWidget {
               ),
             ),
           ),
+          // Driver Profile Layer: Bottom card detailing the assigned rider and vehicle
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -273,6 +285,7 @@ class RiderFoundScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Status Header: Localized arrival estimate
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -284,6 +297,7 @@ class RiderFoundScreen extends StatelessWidget {
                     ],
                   ),
                   const Divider(color: Colors.white10, height: 30),
+                  // Driver Identity Section: Avatar, name, and rating
                   Row(
                     children: [
                       const CircleAvatar(
@@ -310,12 +324,14 @@ class RiderFoundScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
+                          // Highlighted registration plate container
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                             decoration: BoxDecoration(color: const Color(0xFFFFD700), borderRadius: BorderRadius.circular(8)),
                             child: const Text("LEC-4592", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                           ),
                           const SizedBox(height: 5),
+                          // Dynamic vehicle info determined by previous selection
                           Text(
                             vehicleType == "Car" ? "White Corolla" : (vehicleType == "Bike" ? "Honda CD-70" : "Auto Rickshaw"),
                             style: const TextStyle(color: Colors.white54, fontSize: 12),
@@ -325,6 +341,7 @@ class RiderFoundScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 30),
+                  // Communcation Actions: Call and Message buttons
                   Row(
                     children: [
                       _actionBtn(Icons.message, isUrdu ? "پیغام" : "Message", Colors.white12, Colors.white),
@@ -333,6 +350,7 @@ class RiderFoundScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 15),
+                  // Cancellation Trigger
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(isUrdu ? "سفر منسوخ کریں" : "Cancel Trip", style: const TextStyle(color: Colors.redAccent)),
@@ -346,6 +364,7 @@ class RiderFoundScreen extends StatelessWidget {
     );
   }
 
+  /// Shared helper to build interactive action buttons with custom background and icons
   Widget _actionBtn(IconData icon, String label, Color bg, Color iconCol) {
     return Expanded(
       child: Container(

@@ -3,7 +3,7 @@ import '../widgets/custom_ui.dart';
 import '../utils/transitions.dart';
 
 class TravelHistoryScreen extends StatelessWidget {
-  final String language; // Stores the current application language state
+  final String language; // Stores the current application language state (English, Urdu, or Roman Urdu)
 
   const TravelHistoryScreen({super.key, this.language = "English"});
 
@@ -18,6 +18,7 @@ class TravelHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Sample Data: List representing the user's transit history in Lahore
+    // In a real app, this would likely come from a database or an API
     final List<Map<String, String>> history = [
       {"route": "Arfa Tower → Liberty", "date": "Feb 14, 2026", "fare": "Rs. 40", "mode": "Metro Bus"},
       {"route": "Anarkali → Raiwind", "date": "Feb 12, 2026", "fare": "Rs. 120", "mode": "Speedo Bus"},
@@ -32,7 +33,7 @@ class TravelHistoryScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context), // Navigate back to the previous screen
+          onPressed: () => Navigator.pop(context), // Navigates back to the previous screen (likely Profile or Home)
         ),
         title: Text(
           _t("سفر کی تاریخ", "Travel History", "Travel History"),
@@ -41,7 +42,7 @@ class TravelHistoryScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          // Background Layer: Mosque themed image with low opacity for branding consistency
+          // Background Layer: Mosque themed image with low opacity for branding consistency across screens
           Positioned.fill(
             child: Opacity(
               opacity: 0.15,
@@ -55,14 +56,14 @@ class TravelHistoryScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-                // Section Subheader
+                // Section Subheader: Explains what is being displayed in the list below
                 Text(
                   _t("حالیہ مکمل شدہ سفر", "Haaliyah mukammal safar", "Recent Completed Journeys"),
                   style: const TextStyle(color: Colors.white60, fontSize: 13),
                 ),
                 const SizedBox(height: 20),
 
-                // Main List: Rendering history items using a builder for optimal performance
+                // Main List: Rendering history items using a builder for optimal memory performance
                 Expanded(
                   child: ListView.builder(
                     itemCount: history.length,
@@ -84,19 +85,19 @@ class TravelHistoryScreen extends StatelessWidget {
     );
   }
 
-  /// Helper widget to build individual travel history cards
+  /// Helper widget to build individual travel history cards with specific layout and styling
   Widget _buildHistoryTile(String route, String date, String fare, String mode) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: const Color(0xFF1E1E1E), // Dark card color for high contrast
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: Colors.white10),
       ),
       child: Row(
         children: [
-          // Leading: Visual icon based on the transport mode utilized
+          // Leading: Visual icon chosen based on the string content of the transport mode
           CircleAvatar(
             backgroundColor: Colors.blueGrey.withOpacity(0.2),
             child: Icon(
@@ -107,7 +108,7 @@ class TravelHistoryScreen extends StatelessWidget {
           ),
           const SizedBox(width: 15),
 
-          // Center: Route details, timestamp, and transport mode
+          // Center: Vertical stack for route details, timestamp, and transport mode name
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +130,7 @@ class TravelHistoryScreen extends StatelessWidget {
             ),
           ),
 
-          // Trailing: Displaying the fare/cost of the trip
+          // Trailing: Displaying the fare/cost of the trip highlighted in green
           Text(
             fare,
             style: const TextStyle(

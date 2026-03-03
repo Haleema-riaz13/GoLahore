@@ -10,7 +10,7 @@ class DisplayScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        // Transition to navigate to SelectLanguageScreen on tap
+        // Logic: Navigates to the language selection screen when the user taps anywhere
         onTap: () {
           Navigator.of(context).push(
             createSmoothRoute(const SelectLanguageScreen()),
@@ -18,16 +18,17 @@ class DisplayScreen extends StatelessWidget {
         },
         child: Stack(
           children: [
-            // Background Image
+            // Background Layer: High-quality visual of a mosque representing Lahore
             Positioned.fill(
               child: Image.asset(
                 'assets/mosque.jpg',
                 fit: BoxFit.cover,
+                // Fallback UI in case the asset fails to load
                 errorBuilder: (context, error, stackTrace) => Container(color: Colors.blueGrey),
               ),
             ),
 
-            // Dark Gradient Overlay
+            // Visual Overlay: Dark gradient to ensure the white text and logo remain readable
             const GradientOverlay(color: Colors.black, opacity: 0.3, endOpacity: 0.6),
 
             SafeArea(
@@ -35,7 +36,7 @@ class DisplayScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 80),
 
-                  // Professional Logo Section
+                  // --- Central Branding Section ---
                   Center(
                     child: Container(
                       height: 120,
@@ -44,7 +45,7 @@ class DisplayScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            // Shadow brightness kam kar di gayi hai
+                            // Subtle shadow to create depth without overwhelming the background
                             color: Colors.black.withOpacity(0.2),
                             blurRadius: 20,
                             spreadRadius: 2,
@@ -54,18 +55,18 @@ class DisplayScreen extends StatelessWidget {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          // UPDATED: Outer Circle - Simple Flat Orange (No Gradient)
+                          // Flat Orange Brand Circle: Minimalist design
                           Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: const Color(0xFFE67E22), // Simple Flat Orange
+                              color: const Color(0xFFE67E22),
                               border: Border.all(
                                 color: Colors.white.withOpacity(0.8),
                                 width: 2.5,
                               ),
                             ),
                           ),
-                          // Inner Bus Icon - Now White
+                          // Core App Icon: Representing transport
                           const Icon(
                             Icons.directions_bus_rounded,
                             size: 75,
@@ -77,10 +78,11 @@ class DisplayScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 32),
-                  // App Title
+                  // Main App Title using a custom bordered widget
                   const BorderedTitle(title: "GO LAHORE"),
                   const SizedBox(height: 15),
-                  // App Subtitle
+
+                  // App Tagline: Explaining the "Intelligent route advisor" purpose
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 50),
                     child: Text(
@@ -94,8 +96,10 @@ class DisplayScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Spacer(),
-                  // User Instruction
+
+                  const Spacer(), // Pushes the instruction text to the bottom
+
+                  // Interactive Prompt for the user
                   const Text(
                     "Tap to continue",
                     style: TextStyle(

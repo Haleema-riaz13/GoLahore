@@ -33,6 +33,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  // Animation controllers for the entrance effects
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -41,22 +42,26 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
 
+    // Initialize the animation controller for a 2-second duration
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2000),
     );
 
+    // Define the opacity transition (from invisible to fully visible)
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeIn),
     );
 
+    // Define the zoom-out effect for the background image
     _scaleAnimation = Tween<double>(begin: 1.1, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutSine),
     );
 
+    // Start the entrance animations
     _controller.forward();
 
-    // UPDATED: Timer duration changed to 6 seconds (5s loading + 1s stay at 100%)
+    // Timer to handle screen transition: 5s for the bar + 1s hold time
     Timer(const Duration(seconds: 6), () {
       if (mounted) {
         Navigator.pushReplacement(
@@ -64,6 +69,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           PageRouteBuilder(
             pageBuilder: (context, anim, secondAnim) => const DisplayScreen(),
             transitionsBuilder: (context, anim, secondAnim, child) {
+              // Custom cross-fade transition to the next screen
               return FadeTransition(opacity: anim, child: child);
             },
             transitionDuration: const Duration(milliseconds: 600),
@@ -75,6 +81,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   void dispose() {
+    // Clean up the controller to prevent memory leaks
     _controller.dispose();
     super.dispose();
   }
@@ -85,6 +92,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       backgroundColor: Colors.black,
       body: Stack(
         children: [
+          // Background Image with Fade and Scale effects
           AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
@@ -103,6 +111,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             },
           ),
 
+          // Dark Gradient Overlay for text readability
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -119,6 +128,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             ),
           ),
 
+          // Main UI Content (Typography and Progress Bar)
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40.0),
@@ -126,6 +136,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 80),
+                  // App Title: GO
                   FadeTransition(
                     opacity: _fadeAnimation,
                     child: Text(
@@ -137,6 +148,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       ),
                     ),
                   ),
+                  // App Title: LAHORE
                   FadeTransition(
                     opacity: _fadeAnimation,
                     child: Text(
@@ -155,6 +167,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Tagline
                         Text(
                           'Explore. Experience. Love the Living City.✨❤️',
                           style: GoogleFonts.poppins(
@@ -164,16 +177,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         ),
                         const SizedBox(height: 30),
 
-                        // UPDATED: Plain Matte Loading Bar (No Shine, No Gradient)
+                        // Matte Loading Bar Implementation
                         TweenAnimationBuilder<double>(
                           tween: Tween<double>(begin: 0.0, end: 1.0),
-                          duration: const Duration(seconds: 5),
+                          duration: const Duration(seconds: 5), // Fills over 5 seconds
                           builder: (context, value, child) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                // Progress Bar Track
                                 Container(
-                                  height: 6, // Slightly thinner for cleaner look
+                                  height: 6,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     color: Colors.white.withOpacity(0.1),
@@ -181,13 +195,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                                   ),
                                   child: Stack(
                                     children: [
-                                      // Plain Solid Progress Fill
+                                      // Progress Fill (Solid Orange)
                                       FractionallySizedBox(
                                         widthFactor: value,
                                         child: Container(
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(10),
-                                            color: Colors.orange.shade700, // Solid Plain Color
+                                            color: Colors.orange.shade700,
                                           ),
                                         ),
                                       ),
@@ -195,6 +209,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                                   ),
                                 ),
                                 const SizedBox(height: 12),
+                                // Loading Text and Percentage Indicator
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [

@@ -13,10 +13,12 @@ class ChooseVehicleScreen extends StatefulWidget {
 }
 
 class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
+  // State to manage the loading overlay during setup
   bool isNavigating = false;
 
   @override
   Widget build(BuildContext context) {
+    // Localized strings based on user preference
     String title = widget.language == "Urdu" ? "اپنی گاڑی منتخب کریں" : "Choose your vehicle";
     String subtitle = widget.language == "Urdu" ? "سفر شروع کرنے کے لیے اپنی سواری ka انتخاب کریں" : "Select your ride to start the journey";
 
@@ -42,6 +44,7 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
+          // Background branding watermark
           Positioned.fill(
             child: Opacity(
               opacity: 0.05,
@@ -59,6 +62,8 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
                   const SizedBox(height: 8),
                   Text(subtitle, style: TextStyle(color: Colors.grey.shade600, fontSize: 16)),
                   const SizedBox(height: 40),
+
+                  // Vehicle selection options
                   _buildVehicleBox("Car", widget.language == "Urdu" ? "کار" : "Comfortable Car", Icons.directions_car, Colors.blue),
                   _buildVehicleBox("Motorcycle", widget.language == "Urdu" ? "موٹر سائیکل" : "Fast Bike", Icons.motorcycle, Colors.orange),
                   _buildVehicleBox("Rickshaw", widget.language == "Urdu" ? "رکشہ" : "Local Rickshaw", Icons.electric_rickshaw, Colors.green),
@@ -67,6 +72,8 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
               ),
             ),
           ),
+
+          // Setup Overlay (Simulates backend preparation)
           if (isNavigating)
             Container(
               color: Colors.black.withOpacity(0.4),
@@ -99,15 +106,18 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
     );
   }
 
+  /// Helper to build interactive selection cards for different vehicle types
   Widget _buildVehicleBox(String label, String sublabel, IconData icon, Color color) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       child: InkWell(
         onTap: isNavigating ? null : () async {
           setState(() => isNavigating = true);
+          // Artificial delay for UI feedback
           await Future.delayed(const Duration(milliseconds: 1500));
           if (!mounted) return;
           setState(() => isNavigating = false);
+          // Navigate to personal registration
           Navigator.push(context, MaterialPageRoute(builder: (context) => DriverRegistrationScreen(language: widget.language, vehicleType: label)));
         },
         borderRadius: BorderRadius.circular(24),
@@ -163,6 +173,7 @@ class DriverRegistrationScreen extends StatefulWidget {
 class _DriverRegistrationScreenState extends State<DriverRegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  /// Helper for consistent text input fields
   Widget _buildField(String label, IconData icon, String hint, {bool isNumber = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,6 +198,7 @@ class _DriverRegistrationScreenState extends State<DriverRegistrationScreen> {
     );
   }
 
+  /// Helper for document upload placeholders
   Widget _buildUpload(String label, IconData icon) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
@@ -227,6 +239,7 @@ class _DriverRegistrationScreenState extends State<DriverRegistrationScreen> {
           key: _formKey,
           child: Column(
             children: [
+              // Profile Photo Selector
               Center(
                 child: Stack(
                   children: [
@@ -252,6 +265,7 @@ class _DriverRegistrationScreenState extends State<DriverRegistrationScreen> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.orangeAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
                   onPressed: () {
+                    // Navigate to vehicle details
                     Navigator.push(context, MaterialPageRoute(builder: (context) => VehicleInformationScreen(language: widget.language, vehicleType: widget.vehicleType)));
                   },
                   child: Text(isUrdu ? "اگلا" : "NEXT", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16)),
@@ -340,7 +354,7 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.orangeAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
                 onPressed: () {
-                  // Submit ke baad Pending screen par bhejein
+                  // Final submission leads to the pending screen
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegistrationPendingScreen(language: widget.language)));
                 },
                 child: Text(isUrdu ? "جمع کرائیں" : "SUBMIT", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16)),
@@ -354,7 +368,7 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
 }
 
 // =========================================================
-// SCREEN 4: REGISTRATION PENDING SCREEN (UPDATED TRIPLE TAP)
+// SCREEN 4: REGISTRATION PENDING SCREEN (WITH TRIPLE TAP)
 // =========================================================
 class RegistrationPendingScreen extends StatefulWidget {
   final String language;
@@ -368,25 +382,22 @@ class _RegistrationPendingScreenState extends State<RegistrationPendingScreen> {
   int _tapCount = 0;
   DateTime? _lastTapTime;
 
+  /// Custom handler to detect 3 fast taps for development navigation
   void _handleTripleTap() {
     DateTime now = DateTime.now();
 
-    // Time window ko 500ms kar diya hai taake asani se tap count ho
+    // Reset count if the gap between taps is too long (>500ms)
     if (_lastTapTime == null || now.difference(_lastTapTime!) > const Duration(milliseconds: 500)) {
       _tapCount = 1;
-      print("Tap 1");
     } else {
       _tapCount++;
-      print("Tap $_tapCount");
     }
 
     _lastTapTime = now;
 
     if (_tapCount == 3) {
-      print("Triple Tap Detected! Navigating...");
       _tapCount = 0;
-
-      // Navigator ko safely call karne ke liye Future.microtask use kiya hai
+      // Navigate to Dashboard bypassing verification (Development Secret)
       Future.microtask(() {
         Navigator.pushReplacement(
           context,
@@ -410,10 +421,10 @@ class _RegistrationPendingScreenState extends State<RegistrationPendingScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Pura center area tap detect karega
+              // Triple-tap gesture detector on the status icon area
               GestureDetector(
                 onTap: _handleTripleTap,
-                behavior: HitTestBehavior.opaque, // Is se khali jagah par bhi tap kaam karega
+                behavior: HitTestBehavior.opaque,
                 child: Column(
                   children: [
                     Container(
@@ -442,7 +453,7 @@ class _RegistrationPendingScreenState extends State<RegistrationPendingScreen> {
                 style: const TextStyle(fontSize: 16, color: Colors.grey, height: 1.5),
               ),
               const SizedBox(height: 50),
-              // Status Indicator
+              // Current Status Banner
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -463,6 +474,7 @@ class _RegistrationPendingScreenState extends State<RegistrationPendingScreen> {
                 ),
               ),
               const SizedBox(height: 40),
+              // Back Button to exit the flow
               SizedBox(
                 width: double.infinity,
                 height: 55,

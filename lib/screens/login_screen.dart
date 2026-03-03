@@ -15,22 +15,27 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // --- Controllers for managing user input ---
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
+  // --- UI State: Toggle for password visibility ---
   bool _isPasswordHidden = true;
 
+  // --- Logic: Form is valid only if both fields are not empty ---
   bool get _isFormValid => _emailController.text.isNotEmpty && _passController.text.isNotEmpty;
 
   @override
   void initState() {
     super.initState();
+    // Add listeners to rebuild the UI and check validation as the user types
     _emailController.addListener(() => setState(() {}));
     _passController.addListener(() => setState(() {}));
   }
 
   @override
   void dispose() {
+    // Standard practice to dispose controllers to prevent memory leaks
     _emailController.dispose();
     _passController.dispose();
     super.dispose();
@@ -38,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // --- Translation Mappings ---
     String title = "LOGIN";
     String subtitle = "on GoLahore";
     String emailHint = "Email or phone";
@@ -71,8 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      resizeToAvoidBottomInset: true,
+      extendBodyBehindAppBar: true, // Allows background image to fill the screen
+      resizeToAvoidBottomInset: true, // Prevents keyboard from overlapping the UI
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -83,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Stack(
         children: [
+          // Visual Branding: Background image with a dark gradient for readability
           Positioned.fill(child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover)),
           const GradientOverlay(color: Colors.black, opacity: 0.4, endOpacity: 0.85),
 
@@ -92,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   return SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: ConstrainedBox(
+                      // Ensures the content is at least as tall as the screen
                       constraints: BoxConstraints(minHeight: constraints.maxHeight),
                       child: IntrinsicHeight(
                         child: Column(
@@ -107,27 +115,30 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
 
                             const SizedBox(height: 50),
+                            // Input fields wrapped in Glassmorphism effect
                             GlassWrapper(child: _buildTextField(Icons.email_outlined, emailHint, _emailController)),
                             const SizedBox(height: 20),
                             GlassWrapper(child: _buildPasswordField(passHint, _passController)),
                             const SizedBox(height: 30),
 
+                            // Secondary login option: Google OAuth
                             GestureDetector(
                               onTap: () => print("Google Sign In Clicked"),
                               child: SocialGlassTab(label: googleBtn, icon: Icons.g_mobiledata),
                             ),
                             const SizedBox(height: 25),
 
+                            // Navigation links: Forgot Password and Sign Up
                             _buildFooter(context, forgotPass, noAccount, signupText),
 
-                            const Spacer(),
+                            const Spacer(), // Pushes the primary button to the bottom
 
                             const SizedBox(height: 20),
 
-                            // UPDATED: LOGIN Button with PLAIN ORANGE color
+                            // MAIN LOGIN BUTTON: Enabled only when form is valid
                             GestureDetector(
                               onTap: _isFormValid ? () {
-                                FocusScope.of(context).unfocus();
+                                FocusScope.of(context).unfocus(); // Close keyboard before navigating
                                 Navigator.of(context).pushReplacement(
                                   createSmoothRoute(SearchRoutesScreen(language: widget.language)),
                                 );
@@ -138,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   width: double.infinity,
                                   height: 55,
                                   decoration: BoxDecoration(
-                                    color: Colors.orange, // Plain Orange
+                                    color: Colors.orange, // Solid Orange theme color
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                   alignment: Alignment.center,
@@ -168,6 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  /// Helper widget for the bottom navigation links (Forgot Password & Signup)
   Widget _buildFooter(BuildContext context, String forgot, String noAcc, String signup) {
     return Column(
       children: [
@@ -205,6 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  /// Helper for building the generic email/phone input field
   Widget _buildTextField(IconData icon, String hint, TextEditingController controller) {
     return TextField(
         controller: controller,
@@ -219,6 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  /// Helper for building the password field with a visibility toggle
   Widget _buildPasswordField(String hint, TextEditingController controller) {
     return TextField(
         controller: controller,

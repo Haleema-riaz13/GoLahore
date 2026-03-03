@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'our_trip_screen.dart'; // Make sure the path is correct
+import 'our_trip_screen.dart'; // Ensure the path is correct for your project structure
 
 class PublicTransportRoutesScreen extends StatelessWidget {
   final String language;
@@ -8,6 +8,7 @@ class PublicTransportRoutesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Boolean flag to toggle between Urdu and English/Roman Urdu UI strings
     bool isUrdu = language == "Urdu";
 
     return Scaffold(
@@ -16,7 +17,7 @@ class PublicTransportRoutesScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF1A1A1A),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context), // Navigates back to the Search/Map screen
         ),
         title: Text(
           isUrdu ? "عوامی نقل و حمل کے راستے" : "Public Transport Routes",
@@ -26,7 +27,7 @@ class PublicTransportRoutesScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // Route 1 Card
+          // --- Route Option 1: North-South Corridor (Metro Centric) ---
           _buildRouteCard(
             context,
             title: isUrdu ? "شاہدرہ سے گجومتہ" : "Shahdara to Gajjumata",
@@ -34,7 +35,7 @@ class PublicTransportRoutesScreen extends StatelessWidget {
                 ? "میٹرو بس + سپیڈو + لوکل وین"
                 : "Metro Bus + Speedo + Local Van",
             icons: [Icons.directions_bus, Icons.bus_alert, Icons.airport_shuttle],
-            // Data passed to OurTripScreen
+            // String containing emojis passed to the OurTripScreen for the live tracker UI
             iconsString: "🚌 + 🚌 + 🚐",
             price: "Rs. 60",
             duration: "55 min",
@@ -42,7 +43,7 @@ class PublicTransportRoutesScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Route 2 Card
+          // --- Route Option 2: East-West Corridor (Train Centric) ---
           _buildRouteCard(
             context,
             title: isUrdu ? "ٹھوکر نیاز بیگ سے ریلوے اسٹیشن" : "Thokar Niaz Baig to Railway Station",
@@ -50,7 +51,7 @@ class PublicTransportRoutesScreen extends StatelessWidget {
                 ? "اورنج لائن + سپیڈو + چنگچی"
                 : "Orange Line + Speedo + Qingqi",
             icons: [Icons.train, Icons.directions_bus, Icons.electric_rickshaw],
-            // Data passed to OurTripScreen
+            // Data mapping for the live trip visualization
             iconsString: "🚆 + 🚌 + 🛺",
             price: "Rs. 80",
             duration: "40 min",
@@ -58,6 +59,7 @@ class PublicTransportRoutesScreen extends StatelessWidget {
           ),
 
           const SizedBox(height: 25),
+          // Disclaimers regarding real-time traffic variations in Lahore
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
@@ -70,6 +72,7 @@ class PublicTransportRoutesScreen extends StatelessWidget {
     );
   }
 
+  /// Helper widget to build consistent route cards with dynamic data injection
   Widget _buildRouteCard(
       BuildContext context, {
         required String title,
@@ -90,11 +93,13 @@ class PublicTransportRoutesScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Localized Route Destination
           Text(
             title,
             style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
+          // Row of Icons representing the sequence of transport modes
           Row(
             children: icons.map((icon) => Padding(
               padding: const EdgeInsets.only(right: 8.0),
@@ -102,11 +107,13 @@ class PublicTransportRoutesScreen extends StatelessWidget {
             )).toList(),
           ),
           const SizedBox(height: 8),
+          // Localized list of vehicles used in the route
           Text(
             subtitle,
             style: const TextStyle(color: Colors.white60, fontSize: 13),
           ),
           const Divider(color: Colors.white10, height: 25),
+          // Price and Time Estimation Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -127,6 +134,7 @@ class PublicTransportRoutesScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 15),
+          // Action Button: Transitions the user to the active tracking experience
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -136,7 +144,7 @@ class PublicTransportRoutesScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               onPressed: () {
-                // Navigation to OurTripScreen with data
+                // Navigates to OurTripScreen, passing the route configuration and current language
                 Navigator.push(
                   context,
                   MaterialPageRoute(
