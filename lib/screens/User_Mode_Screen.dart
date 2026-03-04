@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../utils/transitions.dart';
 import 'welcome_screen.dart';
 import 'choose_vehicle_screen.dart';
+import 'private_transport_booking_screen.dart'; // Import for the passenger booking flow
 
 class UserModeScreen extends StatefulWidget {
   final String language;
@@ -12,30 +13,37 @@ class UserModeScreen extends StatefulWidget {
 }
 
 class _UserModeScreenState extends State<UserModeScreen> {
-  // Local state to track which mode is selected and the loading status
+  // Variable to store the currently selected role (Passenger or Driver)
   String selectedMode = "";
+  // State to manage loading indicator visibility
   bool isLoading = false;
 
-  // Function to handle the transition after clicking Continue
+  // Handles the screen transition and simulated delay when clicking Continue
   void _handleContinue() async {
     setState(() => isLoading = true);
 
-    // Simulating a network or processing delay for better UX
+    // Simulated processing time for a smoother user experience
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
     setState(() => isLoading = false);
 
-    // Navigation logic based on the selected role
+    // Navigation logic: Redirects to booking screen if Passenger, or vehicle selection if Driver
     if (selectedMode == "Passenger") {
-      Navigator.pushReplacement(context, createSmoothRoute(WelcomeScreen(language: widget.language)));
+      Navigator.pushReplacement(
+          context,
+          createSmoothRoute(PrivateTransportBookingScreen(language: widget.language))
+      );
     } else {
-      Navigator.push(context, createSmoothRoute(ChooseVehicleScreen(language: widget.language)));
+      Navigator.push(
+          context,
+          createSmoothRoute(ChooseVehicleScreen(language: widget.language))
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Localization logic for UI strings based on the passed language
+    // Localization strings determined by the language passed in the constructor
     String title = widget.language == "Urdu" ? "اپنا کردار منتخب کریں" : "Choose Your Role";
     String subtitle = widget.language == "Urdu"
         ? "آپ گو لاہور کو کیسے استعمال کرنا چاہیں گے؟"
@@ -47,10 +55,10 @@ class _UserModeScreenState extends State<UserModeScreen> {
     String continueBtn = widget.language == "Urdu" ? "آگے بڑھیں" : "CONTINUE";
 
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: const Color(0xFF121212), // Deep dark background theme
       body: Stack(
         children: [
-          // Subtle background image of a mosque at 15% opacity
+          // Background Layer: Mosque watermark with low opacity
           Positioned.fill(
               child: Opacity(
                   opacity: 0.15,
@@ -63,7 +71,7 @@ class _UserModeScreenState extends State<UserModeScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 60),
-                  // App Branding: Location Pin inside a bordered circle
+                  // Branding: Location icon inside a bordered circular container
                   Container(
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
@@ -77,11 +85,13 @@ class _UserModeScreenState extends State<UserModeScreen> {
                     ),
                   ),
                   const SizedBox(height: 30),
+                  // Screen Title
                   Text(
                       title,
                       style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)
                   ),
                   const SizedBox(height: 12),
+                  // Screen Subtitle
                   Text(
                     subtitle,
                     textAlign: TextAlign.center,
@@ -89,13 +99,13 @@ class _UserModeScreenState extends State<UserModeScreen> {
                   ),
                   const SizedBox(height: 50),
 
-                  // Mode Selection Tiles
+                  // Role Selection Options
                   _buildModeTile(passengerTitle, passengerSub, Icons.directions_bus, "Passenger"),
                   _buildModeTile(driverTitle, driverSub, Icons.directions_car, "Driver"),
 
-                  const Spacer(),
+                  const Spacer(), // Pushes the action button to the bottom
 
-                  // Action Button: Disabled if no mode is selected
+                  // Continue Button: Only enabled when a mode is selected and not loading
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -109,7 +119,7 @@ class _UserModeScreenState extends State<UserModeScreen> {
                           ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                           : Text(
                           continueBtn,
-                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16, letterSpacing: 1.2)
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16, letterSpacing: 1.2)
                       ),
                     ),
                   ),
@@ -123,17 +133,19 @@ class _UserModeScreenState extends State<UserModeScreen> {
     );
   }
 
-  // Helper widget to create a consistent look for the Passenger/Driver options
+  // Reusable helper widget to build role selection tiles
   Widget _buildModeTile(String title, String sub, IconData icon, String modeKey) {
+    // Check if this specific tile is currently selected
     bool isSelected = selectedMode == modeKey;
+
     return GestureDetector(
       onTap: () => setState(() => selectedMode = modeKey),
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 20),
         decoration: BoxDecoration(
-          // Logic: Highlight the tile if it is the currently selected one
-          color: isSelected ? Colors.orangeAccent.withOpacity(0.12) : const Color(0xFF1E1E1E),
+          // Change appearance based on selection state
+          color: isSelected ? Colors.white.withOpacity(0.1) : const Color(0xFF1E1E1E),
           borderRadius: BorderRadius.circular(25),
           border: Border.all(
               color: isSelected ? Colors.orangeAccent : Colors.white.withOpacity(0.08),
@@ -142,8 +154,17 @@ class _UserModeScreenState extends State<UserModeScreen> {
         ),
         child: Row(
           children: [
-            Icon(icon, color: isSelected ? Colors.orangeAccent : Colors.white70, size: 32),
+            // Role Icon inside an orange circular background
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: const BoxDecoration(
+                color: Colors.orangeAccent,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.black, size: 28),
+            ),
             const SizedBox(width: 20),
+            // Title and description column
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,9 +181,9 @@ class _UserModeScreenState extends State<UserModeScreen> {
                 ],
               ),
             ),
-            // Radio-style icon to show selection state visually
+            // Custom Radio Button indicator
             Icon(
-              isSelected ? Icons.check_circle : Icons.circle_outlined,
+              isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
               color: isSelected ? Colors.orangeAccent : Colors.white24,
               size: 26,
             ),

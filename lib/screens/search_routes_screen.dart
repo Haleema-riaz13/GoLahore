@@ -22,13 +22,13 @@ class SearchRoutesScreen extends StatefulWidget {
 }
 
 class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
-  // GlobalKey to control the Scaffold state (used for opening the drawer programmatically)
+  // Global key to control Scaffold and open the drawer programmatically
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // Controller to handle zooming and panning of the map image
+  // Controller for managing map zoom and pan interactions
   late TransformationController _transformationController;
 
-  // UI State variables
+  // Variables for UI state management
   String? selectedFilter;
   bool isRouteSaved = false;
   bool isDarkMode = true;
@@ -36,12 +36,12 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
   late String displaySearchText;
   late String rainAdvisoryText;
 
-  // Controllers for various text inputs across dialogs and panels
+  // Text controllers for input fields
   final TextEditingController _sourceController = TextEditingController();
   final TextEditingController _destinationController = TextEditingController();
   final TextEditingController _reportNoteController = TextEditingController();
 
-  // Profile data controllers with default values
+  // Profile management controllers
   final TextEditingController _nameController = TextEditingController(text: "User Name");
   final TextEditingController _emailController = TextEditingController(text: "user@lahoretransit.com");
   final TextEditingController _passController = TextEditingController();
@@ -53,7 +53,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     _refreshLanguageText();
   }
 
-  // Updates UI strings based on the selected language
+  // Updates UI text based on the selected language
   void _refreshLanguageText() {
     if (widget.language == "Urdu") {
       displaySearchText = "روانگی ← منزل تلاش کریں";
@@ -69,7 +69,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
 
   @override
   void dispose() {
-    // Clean up all controllers to prevent memory leaks
+    // Dispose controllers to free up memory
     _transformationController.dispose();
     _sourceController.dispose();
     _destinationController.dispose();
@@ -80,28 +80,25 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     super.dispose();
   }
 
-  // Dynamic color getters for Theme Switching (Dark/Light mode)
+  // Dynamic color getters for theme switching
   Color get _barColor => isDarkMode ? const Color(0xFF1A1A1A) : Colors.white;
   Color get _drawerColor => isDarkMode ? const Color(0xFF1E1E1E) : Colors.white;
   Color get _dynamicTextColor => isDarkMode ? Colors.white : Colors.black;
   Color get _dynamicIconColor => isDarkMode ? Colors.white70 : Colors.black87;
 
-  // Standardized orange button style used across the screen
+  // Reusable orange button style
   ButtonStyle get _orangeButtonStyle => ElevatedButton.styleFrom(
     backgroundColor: Colors.orange,
     foregroundColor: Colors.white,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
   );
 
-  // Builds the transport mode selection grid (Public, Private, Hybrid)
+  // Builds the grid of filter chips for transport modes
   Widget _buildFilterChipsGrid() {
     Map<String, List<String>> trans = {
       "PublicCheap": widget.language == "Urdu"
           ? ["عوامی (سستا)", "Public (Cheap)"]
           : ["Public", "Cheapest"],
-      "PrivateFast": widget.language == "Urdu"
-          ? ["نجی (تیز ترین)", "Private (Fastest)"]
-          : ["Private", "Fastest"],
       "HybridWalk": widget.language == "Urdu"
           ? ["ہائبرڈ (کم پیدل)", "Hybrid (Least Walk)"]
           : ["Hybrid", "Least Walk"],
@@ -113,15 +110,13 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
         children: [
           _buildFilterBox(trans["PublicCheap"]![0], trans["PublicCheap"]![1], const Color(0xFF5DADE2), "PublicCheap", Icons.directions_bus),
           const SizedBox(width: 8),
-          _buildFilterBox(trans["PrivateFast"]![0], trans["PrivateFast"]![1], const Color(0xFFC0CA33), "PrivateFast", Icons.directions_car),
-          const SizedBox(width: 8),
           _buildFilterBox(trans["HybridWalk"]![0], trans["HybridWalk"]![1], const Color(0xFF9DBED9), "HybridWalk", Icons.shuffle),
         ],
       ),
     );
   }
 
-  // Helper widget for individual transport mode filter boxes
+  // Helper widget to build individual filter cards
   Widget _buildFilterBox(String title, String subtitle, Color color, String key, IconData icon) {
     bool isSelected = selectedFilter == key;
     return Expanded(
@@ -151,7 +146,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     );
   }
 
-  // Logic for logout confirmation with localized text
+  // Shows a logout confirmation dialog with localized text
   void _showLogoutConfirmation() {
     String logTitle = widget.language == "Urdu" ? "لاگ آؤٹ" : (widget.language == "Roman Urdu" ? "Logout Karein" : "Logout");
     String logMsg = widget.language == "Urdu" ? "کیا آپ واقعی لاگ آؤٹ کرنا چاہتے ہیں؟" : (widget.language == "Roman Urdu" ? "Kya aap logout karna chahte hain?" : "Are you sure you want to logout?");
@@ -180,7 +175,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     );
   }
 
-  // UI feedback for features under development
+  // Temporary dialog for features still in development
   void _showOfflineComingSoon() {
     String title = widget.language == "Urdu" ? "جلد آ رہا ہے!" : (widget.language == "Roman Urdu" ? "Jald aa raha hai!" : "Coming Soon!");
     String msg = widget.language == "Urdu" ? "آف لائن میپس ابھی زیرِ تعمیر hai! 🚀" : (widget.language == "Roman Urdu" ? "Offline maps jald launch hoga! 🚀" : "Offline Maps feature is under development! 🚀");
@@ -196,7 +191,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     );
   }
 
-  // Community report submission dialog logic
+  // Shows a panel for submitting community reports
   void _showReportPanel() {
     String title = widget.language == "Urdu" ? "رپورٹ جمع کریں" : (widget.language == "Roman Urdu" ? "Report Jama Karein" : "Submit Report");
     String hint = widget.language == "Urdu" ? "مسئلہ بیان کریں..." : (widget.language == "Roman Urdu" ? "Masla likhein..." : "Describe the issue...");
@@ -232,7 +227,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     );
   }
 
-  // Profile/Account settings dialog
+  // Opens account settings dialog
   void _showSettingsDialog() {
     String title = widget.language == "Urdu" ? "اکاؤنٹ کی ترتیبات" : "Account Settings";
     showDialog(
@@ -258,7 +253,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     );
   }
 
-  // Toggles the 'Saved' state for the current route
+  // Logic for saving and unsaving routes with snackbar feedback
   void _handleSaveRoute() {
     setState(() { isRouteSaved = !isRouteSaved; });
     String message = isRouteSaved
@@ -277,20 +272,20 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     _refreshLanguageText();
 
     return Scaffold(
-      key: _scaffoldKey, // Assigned key to open the drawer
+      key: _scaffoldKey, // Scaffold key assigned here
       backgroundColor: const Color(0xFF121212),
-      drawer: _buildDrawer(),
+      drawer: _buildDrawer(), // Sidebar drawer
       body: Stack(
         children: [
-          // Background Branding Layer
+          // Background Mosque image layer
           Positioned.fill(child: Opacity(opacity: 0.4, child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover))),
           SafeArea(
             child: Column(
               children: [
-                _buildTopBar(),
-                _buildFilterChipsGrid(),
+                _buildTopBar(), // Search bar and menu icon
+                _buildFilterChipsGrid(), // Transport mode chips
                 const SizedBox(height: 10),
-                // Main Interactive Map Viewport
+                // Map container with zoom support
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 10), decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 1.5), borderRadius: BorderRadius.circular(10)),
@@ -298,18 +293,17 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
                       borderRadius: BorderRadius.circular(8),
                       child: Stack(
                         children: [
-                          // Interactive map with zoom and pan support
                           InteractiveViewer(transformationController: _transformationController, minScale: 1.0, maxScale: 5.0, child: Image.asset('assets/map.jpg', fit: BoxFit.cover, width: double.infinity, height: double.infinity)),
-                          // Map Control Buttons (Zoom In / Reset)
+                          // Map controls (Zoom in/Reset)
                           Positioned(top: 10, left: 10, child: Column(children: [_mapBtn(Icons.add, () => setState(() => _transformationController.value *= Matrix4.diagonal3Values(1.2, 1.2, 1.0))), _mapBtn(Icons.remove, () => setState(() => _transformationController.value = Matrix4.identity()))])),
-                          // Weather-based Route Advisory Panel
+                          // Weather advisory panel
                           Positioned(bottom: 15, left: 15, right: 15, child: Container(padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12), decoration: BoxDecoration(color: Colors.grey.shade800.withOpacity(0.9), borderRadius: BorderRadius.circular(30), border: Border.all(color: Colors.black54)), child: Row(children: [const Text("🌦️", style: TextStyle(fontSize: 18)), const SizedBox(width: 10), Expanded(child: Text(rainAdvisoryText, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)))]))),
                         ],
                       ),
                     ),
                   ),
                 ),
-                _buildBottomNav(),
+                _buildBottomNav(), // Bottom navigation items
               ],
             ),
           ),
@@ -318,7 +312,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     );
   }
 
-  // Builds the top search bar and menu trigger
+  // Top header with menu and search bar
   Widget _buildTopBar() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -341,7 +335,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     );
   }
 
-  // Bottom navigation bar with secondary actions
+  // Custom bottom navigation bar
   Widget _buildBottomNav() {
     int idx = widget.language == "Urdu" ? 0 : (widget.language == "Roman Urdu" ? 1 : 2);
     List<String> savedTxt = ["محفوظ", "Saved", "Saved"];
@@ -361,7 +355,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     );
   }
 
-  // Sidebar navigation drawer containing all app modules
+  // Full sidebar navigation drawer
   Widget _buildDrawer() {
     Map<String, List<String>> menu = {
       "Home": ["ہوم", "Home", "Home"],
@@ -374,7 +368,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
       "ComRep": ["کمیونٹی رپورٹس", "Reports", "Community Reports"],
       "Safety": ["حفاظتی موڈ", "Safety Mode", "Safety Mode"],
       "Driver": ["ڈرائیور موڈ پر جائیں", "Driver Mode par jayein", "Switch to Driver Mode"],
-      "Help": ["مدد اور سپورٹ", "Help & Support", "Help & Support"],
+      "Help": ["مدد aur سپورٹ", "Help & Support", "Help & Support"],
       "Logout": ["لاگ آؤٹ", "Logout", "Logout"],
     };
     int idx = widget.language == "Urdu" ? 0 : (widget.language == "Roman Urdu" ? 1 : 2);
@@ -409,7 +403,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
           Navigator.push(context, MaterialPageRoute(builder: (context) => SafetyModeScreen(language: widget.language)));
         }),
         _drawerTile(Icons.drive_eta, menu['Driver']![idx], () {
-          String msg = widget.language == "Urdu" ? "ڈرائیور موڈ جلد آ رہا ہے!" : (widget.language == "Roman Urdu" ? "Driver mode jald aa raha hai!" : "Driver Mode is coming soon!");
+          String msg = widget.language == "Urdu" ? "ڈرائیور موڈ جلد آ رہا hai!" : (widget.language == "Roman Urdu" ? "Driver mode jald aa raha hai!" : "Driver Mode is coming soon!");
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), backgroundColor: Colors.orange));
         }),
         _drawerTile(Icons.support_agent, menu['Help']![idx], () {
@@ -423,13 +417,13 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     );
   }
 
-  // Reusable component helpers for navigation, drawer tiles, and map buttons
+  // Reusable helper widgets
   Widget _navItem(IconData icon, String label, Color color, VoidCallback onTap) => GestureDetector(onTap: onTap, child: Column(mainAxisSize: MainAxisSize.min, children: [Icon(icon, color: color, size: 26), Text(label, style: TextStyle(color: color.withOpacity(0.9), fontSize: 10))]));
   Widget _drawerTile(IconData icon, String title, VoidCallback onTap) => ListTile(leading: Icon(icon, color: _dynamicIconColor), title: Text(title, style: TextStyle(color: _dynamicTextColor)), onTap: onTap);
   Widget _mapBtn(IconData icon, VoidCallback onTap) => GestureDetector(onTap: onTap, child: Container(width: 40, height: 40, margin: const EdgeInsets.only(bottom: 5), alignment: Alignment.center, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black, width: 1.5)), child: Icon(icon, color: Colors.black, size: 24)));
   Widget _buildSettingsField(String label, TextEditingController controller, IconData icon, {bool isPassword = false}) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(label, style: TextStyle(color: isDarkMode ? Colors.white60 : Colors.black54, fontSize: 12)), TextField(controller: controller, obscureText: isPassword, style: TextStyle(color: _dynamicTextColor), decoration: InputDecoration(prefixIcon: Icon(icon, color: Colors.blueAccent, size: 20)))]);
 
-  // Launches the route planning dialog with smart redirection based on selected filters
+  // Launches route planning bottom sheet with navigation logic
   void _openSearchDialog() {
     String title = widget.language == "Urdu" ? "روٹ پلان کریں" : (widget.language == "Roman Urdu" ? "Route Plan Karein" : "Plan Route");
     String src = widget.language == "Urdu" ? "روانگی" : "Source";
@@ -454,12 +448,9 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(widget.language == "Urdu" ? "براہ کرم روانگی اور منزل درج کریں!" : "Please enter both Source and Destination!"), backgroundColor: Colors.orangeAccent));
                 } else {
                   Navigator.pop(context);
-                  // Logic to navigate to different screens based on the current filter selection
+                  // Dynamic navigation based on selected filter mode
                   if (selectedFilter == "PublicCheap") {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => PublicTransportRoutesScreen(language: widget.language)));
-                  }
-                  else if (selectedFilter == "PrivateFast") {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => PrivateTransportBookingScreen(language: widget.language)));
                   }
                   else if (selectedFilter == "HybridWalk") {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => HybridTransportRoutesScreen(language: widget.language)));
@@ -477,5 +468,6 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
     );
   }
 
+  // Reusable text input for route planning search
   Widget _buildSearchInput(TextEditingController controller, String hint, IconData icon, Color col) => TextField(controller: controller, style: TextStyle(color: _dynamicTextColor), decoration: InputDecoration(prefixIcon: Icon(icon, color: col), hintText: hint, hintStyle: TextStyle(color: isDarkMode ? Colors.white38 : Colors.black38), filled: true, fillColor: isDarkMode ? Colors.white10 : Colors.black12));
 }
