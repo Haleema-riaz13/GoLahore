@@ -11,12 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  google_fonts: ^6.2.1 # Sahi jagah: dependencies ke niche
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  # This plugin is required to change the app icon
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
@@ -26,3 +28,13 @@ flutter:
     - assets/mosque.jpg
     - assets/map.jpg
     - assets/metro_dark.jpg
+    - assets/app_icon.jpg # Your new icon image
+
+# Configuration for the app icon generation
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/app_icon.jpg"
+  # Set a background color for Android Adaptive Icons (matches your purple/pink theme)
+  adaptive_icon_background: "#E91E63"
+  adaptive_icon_foreground: "assets/app_icon.jpg"
