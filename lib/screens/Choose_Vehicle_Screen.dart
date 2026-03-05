@@ -13,22 +13,20 @@ class ChooseVehicleScreen extends StatefulWidget {
 }
 
 class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
-  // State to manage the loading overlay during setup
   bool isNavigating = false;
 
   @override
   Widget build(BuildContext context) {
-    // Localized strings based on user preference
     String title = widget.language == "Urdu" ? "اپنی گاڑی منتخب کریں" : "Choose your vehicle";
     String subtitle = widget.language == "Urdu" ? "سفر شروع کرنے کے لیے اپنی سواری ka انتخاب کریں" : "Select your ride to start the journey";
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black, // Dark background
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -44,11 +42,21 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          // Background branding watermark
+          // DARK VISIBLE BACKGROUND
           Positioned.fill(
             child: Opacity(
-              opacity: 0.05,
+              opacity: 0.25, // Increased visibility for dark mode
               child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover),
+            ),
+          ),
+          // Dark Gradient Overlay for readability
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.black.withOpacity(0.4), Colors.black],
+              ),
             ),
           ),
           SafeArea(
@@ -58,12 +66,11 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  Text(title, style: const TextStyle(color: Colors.black, fontSize: 32, fontWeight: FontWeight.bold)),
+                  Text(title, style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
-                  Text(subtitle, style: TextStyle(color: Colors.grey.shade600, fontSize: 16)),
+                  Text(subtitle, style: TextStyle(color: Colors.white70, fontSize: 16)),
                   const SizedBox(height: 40),
 
-                  // Vehicle selection options
                   _buildVehicleBox("Car", widget.language == "Urdu" ? "کار" : "Comfortable Car", Icons.directions_car, Colors.blue),
                   _buildVehicleBox("Motorcycle", widget.language == "Urdu" ? "موٹر سائیکل" : "Fast Bike", Icons.motorcycle, Colors.orange),
                   _buildVehicleBox("Rickshaw", widget.language == "Urdu" ? "رکشہ" : "Local Rickshaw", Icons.electric_rickshaw, Colors.green),
@@ -73,18 +80,17 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
             ),
           ),
 
-          // Setup Overlay (Simulates backend preparation)
           if (isNavigating)
             Container(
-              color: Colors.black.withOpacity(0.4),
+              color: Colors.black.withOpacity(0.7),
               child: Center(
                 child: Container(
                   padding: const EdgeInsets.all(30),
                   margin: const EdgeInsets.symmetric(horizontal: 40),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color(0xFF1E1E1E), // Dark card
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 15)],
+                    boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 15)],
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -94,7 +100,7 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
                       Text(
                         widget.language == "Urdu" ? "تھوڑا انتظار کریں..." : "Setting up your ride...",
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black87),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
                       ),
                     ],
                   ),
@@ -106,36 +112,33 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
     );
   }
 
-  /// Helper to build interactive selection cards for different vehicle types
   Widget _buildVehicleBox(String label, String sublabel, IconData icon, Color color) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       child: InkWell(
         onTap: isNavigating ? null : () async {
           setState(() => isNavigating = true);
-          // Artificial delay for UI feedback
           await Future.delayed(const Duration(milliseconds: 1500));
           if (!mounted) return;
           setState(() => isNavigating = false);
-          // Navigate to personal registration
           Navigator.push(context, MaterialPageRoute(builder: (context) => DriverRegistrationScreen(language: widget.language, vehicleType: label)));
         },
         borderRadius: BorderRadius.circular(24),
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: const Color(0xFF1E1E1E), // Dark card
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: color.withOpacity(0.3), width: 1.5),
+            border: Border.all(color: color.withOpacity(0.5), width: 1.5),
             boxShadow: [
-              BoxShadow(color: color.withOpacity(0.1), blurRadius: 15, offset: const Offset(0, 8)),
+              BoxShadow(color: Colors.black26, blurRadius: 10, offset: const Offset(0, 5)),
             ],
           ),
           child: Row(
             children: [
               Container(
                 width: 70, height: 70,
-                decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(18)),
+                decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(18)),
                 child: Icon(icon, color: color, size: 35),
               ),
               const SizedBox(width: 20),
@@ -143,13 +146,13 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(label, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
+                    Text(label, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
                     const SizedBox(height: 4),
-                    Text(sublabel, style: TextStyle(fontSize: 14, color: Colors.grey.shade500)),
+                    Text(sublabel, style: TextStyle(fontSize: 14, color: Colors.white60)),
                   ],
                 ),
               ),
-              Icon(Icons.arrow_forward_ios_rounded, color: color.withOpacity(0.5), size: 18),
+              Icon(Icons.arrow_forward_ios_rounded, color: color.withOpacity(0.8), size: 18),
             ],
           ),
         ),
@@ -173,22 +176,21 @@ class DriverRegistrationScreen extends StatefulWidget {
 class _DriverRegistrationScreenState extends State<DriverRegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  /// Helper for consistent text input fields
   Widget _buildField(String label, IconData icon, String hint, {bool isNumber = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87)),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white70)),
         const SizedBox(height: 8),
         TextFormField(
-          style: const TextStyle(color: Colors.black, fontSize: 16),
+          style: const TextStyle(color: Colors.white, fontSize: 16),
           keyboardType: isNumber ? TextInputType.phone : TextInputType.text,
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Colors.orangeAccent),
             hintText: hint,
-            hintStyle: const TextStyle(color: Colors.grey),
+            hintStyle: const TextStyle(color: Colors.white38),
             filled: true,
-            fillColor: Colors.grey.shade100,
+            fillColor: Colors.white.withOpacity(0.08),
             contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
           ),
@@ -198,13 +200,12 @@ class _DriverRegistrationScreenState extends State<DriverRegistrationScreen> {
     );
   }
 
-  /// Helper for document upload placeholders
   Widget _buildUpload(String label, IconData icon) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: Colors.white.withOpacity(0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.orangeAccent.withOpacity(0.3)),
       ),
@@ -212,9 +213,9 @@ class _DriverRegistrationScreenState extends State<DriverRegistrationScreen> {
         children: [
           Icon(icon, color: Colors.orangeAccent),
           const SizedBox(width: 15),
-          Text(label, style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.w500)),
+          Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
           const Spacer(),
-          const Icon(Icons.cloud_upload, color: Colors.grey),
+          const Icon(Icons.cloud_upload, color: Colors.white54),
         ],
       ),
     );
@@ -225,56 +226,67 @@ class _DriverRegistrationScreenState extends State<DriverRegistrationScreen> {
     bool isUrdu = widget.language == "Urdu";
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(isUrdu ? "رجسٹریشن مکمل کریں" : "Driver Registration",
-            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              // Profile Photo Selector
-              Center(
-                child: Stack(
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.2,
+              child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover),
+            ),
+          ),
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Form(
+                key: _formKey,
+                child: Column(
                   children: [
-                    const CircleAvatar(
-                      radius: 55,
-                      backgroundColor: Colors.orangeAccent,
-                      child: CircleAvatar(radius: 52, backgroundColor: Colors.white, child: Icon(Icons.person, size: 60, color: Colors.grey)),
+                    Center(
+                      child: Stack(
+                        children: [
+                          const CircleAvatar(
+                            radius: 55,
+                            backgroundColor: Colors.orangeAccent,
+                            child: CircleAvatar(radius: 52, backgroundColor: Color(0xFF1E1E1E), child: Icon(Icons.person, size: 60, color: Colors.white24)),
+                          ),
+                          Positioned(bottom: 0, right: 0, child: Container(padding: const EdgeInsets.all(4), decoration: const BoxDecoration(color: Colors.orangeAccent, shape: BoxShape.circle), child: const Icon(Icons.camera_alt, color: Colors.black, size: 20))),
+                        ],
+                      ),
                     ),
-                    Positioned(bottom: 0, right: 0, child: Container(padding: const EdgeInsets.all(4), decoration: const BoxDecoration(color: Colors.orangeAccent, shape: BoxShape.circle), child: const Icon(Icons.camera_alt, color: Colors.white, size: 20))),
+                    const SizedBox(height: 30),
+                    _buildField(isUrdu ? "پورا نام" : "Full Name", Icons.person, isUrdu ? "اپنا نام لکھیں" : "Enter full name"),
+                    _buildField(isUrdu ? "فون نمبر" : "Phone Number", Icons.phone, "03xx xxxxxxx", isNumber: true),
+                    _buildField(isUrdu ? "لائسنس نمبر" : "License Number", Icons.badge, "XYZ-12345"),
+                    _buildUpload(isUrdu ? "شناختی کارڈ (CNIC)" : "CNIC Photo", Icons.assignment_ind),
+                    _buildUpload(isUrdu ? "ڈرائیونگ لائسنس" : "Driving License", Icons.drive_eta),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 55,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.orangeAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => VehicleInformationScreen(language: widget.language, vehicleType: widget.vehicleType)));
+                        },
+                        child: Text(isUrdu ? "اگلا" : "NEXT", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
-              const SizedBox(height: 30),
-              _buildField(isUrdu ? "پورا نام" : "Full Name", Icons.person, isUrdu ? "اپنا نام لکھیں" : "Enter full name"),
-              _buildField(isUrdu ? "فون نمبر" : "Phone Number", Icons.phone, "03xx xxxxxxx", isNumber: true),
-              _buildField(isUrdu ? "لائسنس نمبر" : "License Number", Icons.badge, "XYZ-12345"),
-              _buildUpload(isUrdu ? "شناختی کارڈ (CNIC)" : "CNIC Photo", Icons.assignment_ind),
-              _buildUpload(isUrdu ? "ڈرائیونگ لائسنس" : "Driving License", Icons.drive_eta),
-              const SizedBox(height: 30),
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.orangeAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
-                  onPressed: () {
-                    // Navigate to vehicle details
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => VehicleInformationScreen(language: widget.language, vehicleType: widget.vehicleType)));
-                  },
-                  child: Text(isUrdu ? "اگلا" : "NEXT", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16)),
-                ),
-              ),
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -298,15 +310,15 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87)),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white70)),
         const SizedBox(height: 8),
         TextFormField(
-          style: const TextStyle(color: Colors.black, fontSize: 16),
+          style: const TextStyle(color: Colors.white, fontSize: 16),
           keyboardType: isNumber ? TextInputType.number : TextInputType.text,
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Colors.orangeAccent),
-            hintText: hint, hintStyle: const TextStyle(color: Colors.grey),
-            filled: true, fillColor: Colors.grey.shade100,
+            hintText: hint, hintStyle: const TextStyle(color: Colors.white38),
+            filled: true, fillColor: Colors.white.withOpacity(0.08),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
           ),
         ),
@@ -319,8 +331,8 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(color: Colors.grey.shade50, borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.orangeAccent.withOpacity(0.3))),
-      child: Row(children: [Icon(icon, color: Colors.orangeAccent), const SizedBox(width: 15), Text(label, style: const TextStyle(color: Colors.black87)), const Spacer(), const Icon(Icons.add_a_photo_outlined, color: Colors.grey)]),
+      decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.orangeAccent.withOpacity(0.3))),
+      child: Row(children: [Icon(icon, color: Colors.orangeAccent), const SizedBox(width: 15), Text(label, style: const TextStyle(color: Colors.white)), const Spacer(), const Icon(Icons.add_a_photo_outlined, color: Colors.white54)]),
     );
   }
 
@@ -329,39 +341,51 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
     bool isUrdu = widget.language == "Urdu";
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text(isUrdu ? "گاڑی کی معلومات" : "Vehicle Information", style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
+        title: Text(isUrdu ? "گاڑی کی معلومات" : "Vehicle Information", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildField(isUrdu ? "برانڈ" : "Vehicle Brand", "Toyota, Suzuki...", Icons.branding_watermark),
-            _buildField(isUrdu ? "ماڈل" : "Vehicle Model", "Corolla, CD-70...", Icons.model_training),
-            _buildField(isUrdu ? "رنگ" : "Vehicle Color", "White, Black...", Icons.color_lens),
-            _buildField(isUrdu ? "نمبر پلیٹ" : "Number Plate", "LEA-1234", Icons.pin),
-            _buildField(isUrdu ? "پیداوار کا سال" : "Production Year", "2024", Icons.calendar_today, isNumber: true),
-            _buildUploadTile(isUrdu ? "گاڑی کی تصویر" : "Photo of Vehicle", Icons.camera_alt),
-            _buildUploadTile(isUrdu ? "گاڑی کی رجسٹریشن" : "Vehicle Registration", Icons.file_present),
-            const SizedBox(height: 30),
-            SizedBox(
-              width: double.infinity, height: 55,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.orangeAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
-                onPressed: () {
-                  // Final submission leads to the pending screen
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegistrationPendingScreen(language: widget.language)));
-                },
-                child: Text(isUrdu ? "جمع کرائیں" : "SUBMIT", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16)),
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.2,
+              child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover),
+            ),
+          ),
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildField(isUrdu ? "برانڈ" : "Vehicle Brand", "Toyota, Suzuki...", Icons.branding_watermark),
+                  _buildField(isUrdu ? "ماڈل" : "Vehicle Model", "Corolla, CD-70...", Icons.model_training),
+                  _buildField(isUrdu ? "رنگ" : "Vehicle Color", "White, Black...", Icons.color_lens),
+                  _buildField(isUrdu ? "نمبر پلیٹ" : "Number Plate", "LEA-1234", Icons.pin),
+                  _buildField(isUrdu ? "پیداوار کا سال" : "Production Year", "2024", Icons.calendar_today, isNumber: true),
+                  _buildUploadTile(isUrdu ? "گاڑی کی تصویر" : "Photo of Vehicle", Icons.camera_alt),
+                  _buildUploadTile(isUrdu ? "گاڑی کی رجسٹریشن" : "Vehicle Registration", Icons.file_present),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: double.infinity, height: 55,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.orangeAccent, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+                      onPressed: () {
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegistrationPendingScreen(language: widget.language)));
+                      },
+                      child: Text(isUrdu ? "جمع کرائیں" : "SUBMIT", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16)),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -382,22 +406,17 @@ class _RegistrationPendingScreenState extends State<RegistrationPendingScreen> {
   int _tapCount = 0;
   DateTime? _lastTapTime;
 
-  /// Custom handler to detect 3 fast taps for development navigation
   void _handleTripleTap() {
     DateTime now = DateTime.now();
-
-    // Reset count if the gap between taps is too long (>500ms)
     if (_lastTapTime == null || now.difference(_lastTapTime!) > const Duration(milliseconds: 500)) {
       _tapCount = 1;
     } else {
       _tapCount++;
     }
-
     _lastTapTime = now;
 
     if (_tapCount == 3) {
       _tapCount = 0;
-      // Navigate to Dashboard bypassing verification (Development Secret)
       Future.microtask(() {
         Navigator.pushReplacement(
           context,
@@ -414,85 +433,92 @@ class _RegistrationPendingScreenState extends State<RegistrationPendingScreen> {
     bool isUrdu = widget.language == "Urdu";
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Triple-tap gesture detector on the status icon area
-              GestureDetector(
-                onTap: _handleTripleTap,
-                behavior: HitTestBehavior.opaque,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 150, width: 150,
-                      decoration: BoxDecoration(
-                          color: Colors.orangeAccent.withOpacity(0.1),
-                          shape: BoxShape.circle
-                      ),
-                      child: const Icon(Icons.timer_outlined, size: 80, color: Colors.orangeAccent),
-                    ),
-                    const SizedBox(height: 40),
-                    Text(
-                      isUrdu ? "درخواست موصول ہو گئی ہے" : "Application Received!",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 15),
-              Text(
-                isUrdu
-                    ? "آپ کی فراہم کردہ معلومات کی جانچ پڑتال کی جا رہی ہے۔ تصدیق مکمل ہونے پر آپ کو مطلع کر دیا جائے گا۔"
-                    : "We are reviewing your documents. You will be notified once your account is activated (usually within 24-48 hours).",
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 16, color: Colors.grey, height: 1.5),
-              ),
-              const SizedBox(height: 50),
-              // Current Status Banner
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.orangeAccent,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.info_outline, color: Colors.white),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: Text(
-                        isUrdu ? "تصدیق کا عمل جاری ہے" : "Verification is in progress",
-                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40),
-              // Back Button to exit the flow
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orangeAccent,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                  ),
-                  onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
-                  child: Text(
-                    isUrdu ? "ہوم اسکرین پر واپس جائیں" : "BACK TO HOME",
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ],
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.2,
+              child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover),
+            ),
           ),
-        ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: _handleTripleTap,
+                    behavior: HitTestBehavior.opaque,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 150, width: 150,
+                          decoration: BoxDecoration(
+                              color: Colors.orangeAccent.withOpacity(0.15),
+                              shape: BoxShape.circle
+                          ),
+                          child: const Icon(Icons.timer_outlined, size: 80, color: Colors.orangeAccent),
+                        ),
+                        const SizedBox(height: 40),
+                        Text(
+                          isUrdu ? "درخواست موصول ہو گئی ہے" : "Application Received!",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Text(
+                    isUrdu
+                        ? "آپ کی فراہم کردہ معلومات کی جانچ پڑتال کی جا رہی ہے۔ تصدیق مکمل ہونے پر آپ کو مطلع کر دیا جائے گا۔"
+                        : "We are reviewing your documents. You will be notified once your account is activated (usually within 24-48 hours).",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 16, color: Colors.white70, height: 1.5),
+                  ),
+                  const SizedBox(height: 50),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.orangeAccent,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.info_outline, color: Colors.black),
+                        const SizedBox(width: 15),
+                        Expanded(
+                          child: Text(
+                            isUrdu ? "تصدیق کا عمل جاری ہے" : "Verification is in progress",
+                            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white12,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: BorderSide(color: Colors.white24)),
+                      ),
+                      onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
+                      child: Text(
+                        isUrdu ? "ہوم اسکرین پر واپس جائیں" : "BACK TO HOME",
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
