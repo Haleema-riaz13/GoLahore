@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_ui.dart';
-import '../utils/transitions.dart';
 
 class CommunityReportScreen extends StatefulWidget {
   final String language; // Holds the selected language state (Urdu, Roman Urdu, or English)
@@ -60,7 +58,8 @@ class _CommunityReportScreenState extends State<CommunityReportScreen> {
               width: MediaQuery.of(context).size.width * 0.85,
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.6),
+                // UPDATED: withValues instead of withOpacity to fix deprecation warning
+                color: Colors.black.withValues(alpha: 0.6),
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(color: Colors.white12),
               ),

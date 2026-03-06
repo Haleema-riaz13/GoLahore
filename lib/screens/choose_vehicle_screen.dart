@@ -21,7 +21,7 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
     String subtitle = widget.language == "Urdu" ? "سفر شروع کرنے کے لیے اپنی سواری ka انتخاب کریں" : "Select your ride to start the journey";
 
     return Scaffold(
-      backgroundColor: Colors.black, // Dark background
+      backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -42,20 +42,18 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          // DARK VISIBLE BACKGROUND
           Positioned.fill(
             child: Opacity(
-              opacity: 0.25, // Increased visibility for dark mode
+              opacity: 0.25,
               child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover),
             ),
           ),
-          // Dark Gradient Overlay for readability
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.black.withOpacity(0.4), Colors.black],
+                colors: [Colors.black.withValues(alpha: 0.4), Colors.black],
               ),
             ),
           ),
@@ -68,7 +66,7 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
                   const SizedBox(height: 20),
                   Text(title, style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
-                  Text(subtitle, style: TextStyle(color: Colors.white70, fontSize: 16)),
+                  Text(subtitle, style: const TextStyle(color: Colors.white70, fontSize: 16)),
                   const SizedBox(height: 40),
 
                   _buildVehicleBox("Car", widget.language == "Urdu" ? "کار" : "Comfortable Car", Icons.directions_car, Colors.blue),
@@ -82,13 +80,13 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
 
           if (isNavigating)
             Container(
-              color: Colors.black.withOpacity(0.7),
+              color: Colors.black.withValues(alpha: 0.7),
               child: Center(
                 child: Container(
                   padding: const EdgeInsets.all(30),
                   margin: const EdgeInsets.symmetric(horizontal: 40),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1E1E1E), // Dark card
+                    color: const Color(0xFF1E1E1E),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 15)],
                   ),
@@ -119,7 +117,10 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
         onTap: isNavigating ? null : () async {
           setState(() => isNavigating = true);
           await Future.delayed(const Duration(milliseconds: 1500));
+
+          // FIX: Checked async gap before using context
           if (!mounted) return;
+
           setState(() => isNavigating = false);
           Navigator.push(context, MaterialPageRoute(builder: (context) => DriverRegistrationScreen(language: widget.language, vehicleType: label)));
         },
@@ -127,18 +128,18 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E1E1E), // Dark card
+            color: const Color(0xFF1E1E1E),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: color.withOpacity(0.5), width: 1.5),
-            boxShadow: [
-              BoxShadow(color: Colors.black26, blurRadius: 10, offset: const Offset(0, 5)),
+            border: Border.all(color: color.withValues(alpha: 0.5), width: 1.5),
+            boxShadow: const [
+              BoxShadow(color: Colors.black26, blurRadius: 10, offset: Offset(0, 5)),
             ],
           ),
           child: Row(
             children: [
               Container(
                 width: 70, height: 70,
-                decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(18)),
+                decoration: BoxDecoration(color: color.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(18)),
                 child: Icon(icon, color: color, size: 35),
               ),
               const SizedBox(width: 20),
@@ -148,11 +149,11 @@ class _ChooseVehicleScreenState extends State<ChooseVehicleScreen> {
                   children: [
                     Text(label, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
                     const SizedBox(height: 4),
-                    Text(sublabel, style: TextStyle(fontSize: 14, color: Colors.white60)),
+                    Text(sublabel, style: const TextStyle(fontSize: 14, color: Colors.white60)),
                   ],
                 ),
               ),
-              Icon(Icons.arrow_forward_ios_rounded, color: color.withOpacity(0.8), size: 18),
+              Icon(Icons.arrow_forward_ios_rounded, color: color.withValues(alpha: 0.8), size: 18),
             ],
           ),
         ),
@@ -190,7 +191,7 @@ class _DriverRegistrationScreenState extends State<DriverRegistrationScreen> {
             hintText: hint,
             hintStyle: const TextStyle(color: Colors.white38),
             filled: true,
-            fillColor: Colors.white.withOpacity(0.08),
+            fillColor: Colors.white.withValues(alpha: 0.08),
             contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
           ),
@@ -205,9 +206,9 @@ class _DriverRegistrationScreenState extends State<DriverRegistrationScreen> {
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.orangeAccent.withOpacity(0.3)),
+        border: Border.all(color: Colors.orangeAccent.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -318,7 +319,8 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Colors.orangeAccent),
             hintText: hint, hintStyle: const TextStyle(color: Colors.white38),
-            filled: true, fillColor: Colors.white.withOpacity(0.08),
+            filled: true,
+            fillColor: Colors.white.withValues(alpha: 0.08),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
           ),
         ),
@@ -331,7 +333,7 @@ class _VehicleInformationScreenState extends State<VehicleInformationScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.orangeAccent.withOpacity(0.3))),
+      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.orangeAccent.withValues(alpha: 0.3))),
       child: Row(children: [Icon(icon, color: Colors.orangeAccent), const SizedBox(width: 15), Text(label, style: const TextStyle(color: Colors.white)), const Spacer(), const Icon(Icons.add_a_photo_outlined, color: Colors.white54)]),
     );
   }
@@ -417,7 +419,10 @@ class _RegistrationPendingScreenState extends State<RegistrationPendingScreen> {
 
     if (_tapCount == 3) {
       _tapCount = 0;
+
+      // FIX: microtask for immediate push, context safe because we are inside state
       Future.microtask(() {
+        if (!mounted) return;
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -456,7 +461,7 @@ class _RegistrationPendingScreenState extends State<RegistrationPendingScreen> {
                         Container(
                           height: 150, width: 150,
                           decoration: BoxDecoration(
-                              color: Colors.orangeAccent.withOpacity(0.15),
+                              color: Colors.orangeAccent.withValues(alpha: 0.15),
                               shape: BoxShape.circle
                           ),
                           child: const Icon(Icons.timer_outlined, size: 80, color: Colors.orangeAccent),
@@ -505,7 +510,7 @@ class _RegistrationPendingScreenState extends State<RegistrationPendingScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white12,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: BorderSide(color: Colors.white24)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: const BorderSide(color: Colors.white24)),
                       ),
                       onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
                       child: Text(

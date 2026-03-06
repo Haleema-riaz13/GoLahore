@@ -86,7 +86,8 @@ class HybridTransportRoutesScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.8),
+        // Updated from .withOpacity() to .withValues() for latest Flutter versions
+        color: color.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.white12),
       ),

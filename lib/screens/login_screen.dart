@@ -123,7 +123,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             // Secondary login option: Google OAuth
                             GestureDetector(
-                              onTap: () => print("Google Sign In Clicked"),
+                              onTap: () {
+                                // Logic for Google Sign In can be added here
+                              },
                               child: SocialGlassTab(label: googleBtn, icon: Icons.g_mobiledata),
                             ),
                             const SizedBox(height: 25),

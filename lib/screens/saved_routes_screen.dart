@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_ui.dart';
-import '../utils/transitions.dart';
 
 class SavedRoutesScreen extends StatelessWidget {
   final String language; // Holds the user's selected language (Urdu, Roman Urdu, or English)

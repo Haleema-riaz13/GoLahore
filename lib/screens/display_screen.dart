@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_ui.dart';
 import '../utils/transitions.dart';
 import 'select_language_screen.dart';
 
@@ -28,8 +27,21 @@ class DisplayScreen extends StatelessWidget {
               ),
             ),
 
-            // Visual Overlay: Dark gradient to ensure the white text and logo remain readable
-            const GradientOverlay(color: Colors.black, opacity: 0.3, endOpacity: 0.6),
+            // Visual Overlay: Replaced custom GradientOverlay with standard Container
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withValues(alpha: 0.3),
+                      Colors.black.withValues(alpha: 0.6),
+                    ],
+                  ),
+                ),
+              ),
+            ),
 
             SafeArea(
               child: Column(
@@ -45,8 +57,8 @@ class DisplayScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            // Subtle shadow to create depth without overwhelming the background
-                            color: Colors.black.withOpacity(0.2),
+                            // UPDATED: .withValues instead of .withOpacity to fix lint warning
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 20,
                             spreadRadius: 2,
                           ),
@@ -61,7 +73,8 @@ class DisplayScreen extends StatelessWidget {
                               shape: BoxShape.circle,
                               color: const Color(0xFFE67E22),
                               border: Border.all(
-                                color: Colors.white.withOpacity(0.8),
+                                // UPDATED: .withValues instead of .withOpacity
+                                color: Colors.white.withValues(alpha: 0.8),
                                 width: 2.5,
                               ),
                             ),
@@ -78,8 +91,34 @@ class DisplayScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 32),
-                  // Main App Title using a custom bordered widget
-                  const BorderedTitle(title: "GO LAHORE"),
+
+                  // Main App Title: Replaced custom BorderedTitle with standard Stack/Text
+                  Stack(
+                    children: [
+                      // Outline/Border effect
+                      Text(
+                        "GO LAHORE",
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 2
+                            ..color = Colors.white,
+                        ),
+                      ),
+                      // Solid text
+                      const Text(
+                        "GO LAHORE",
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+
                   const SizedBox(height: 15),
 
                   // App Tagline: Explaining the "Intelligent route advisor" purpose

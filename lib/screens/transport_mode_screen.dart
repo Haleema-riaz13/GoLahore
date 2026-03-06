@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'welcome_screen.dart'; // Path to the welcome screen
-import 'User_Mode_Screen.dart'; // Path to the user mode screen
+import 'user_mode_screen.dart'; // Path to the user mode screen
 
 class TransportModeScreen extends StatefulWidget {
   final String language;
@@ -37,7 +37,8 @@ class _TransportModeScreenState extends State<TransportModeScreen> {
                 fit: BoxFit.cover,
                 // Dark overlay to ensure white text is readable
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.65),
+                  // Updated from .withOpacity() to .withValues() for modern standards
+                  Colors.black.withValues(alpha: 0.65),
                   BlendMode.darken,
                 ),
               ),
@@ -143,8 +144,8 @@ class _TransportModeScreenState extends State<TransportModeScreen> {
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         decoration: BoxDecoration(
-          // Glassmorphism effect: uses higher opacity for selected items
-          color: isSelected ? Colors.white.withOpacity(0.2) : Colors.black.withOpacity(0.3),
+          // Glassmorphism effect: updated withValues for modern Flutter standards
+          color: isSelected ? Colors.white.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? const Color(0xFFE28A2B) : Colors.white24,

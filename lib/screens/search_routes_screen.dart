@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_ui.dart';
-import '../utils/transitions.dart';
 import 'login_screen.dart';
 import 'route_result_screen.dart';
 import 'community_report_screen.dart';
@@ -9,7 +7,6 @@ import 'travel_history_screen.dart';
 import 'safety_mode_screen.dart';
 import 'help_support_screen.dart';
 import 'public_transport_routes_screen.dart';
-import 'private_transport_booking_screen.dart';
 import 'hybrid_transport_routes_screen.dart';
 
 class SearchRoutesScreen extends StatefulWidget {
@@ -129,7 +126,8 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-            color: isSelected ? color : color.withOpacity(0.2),
+            // Updated from .withOpacity() to .withValues() for modern Flutter standards
+            color: isSelected ? color : color.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(15),
             border: Border.all(color: isSelected ? Colors.white : Colors.white12, width: 1),
           ),
@@ -297,7 +295,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
                           // Map controls (Zoom in/Reset)
                           Positioned(top: 10, left: 10, child: Column(children: [_mapBtn(Icons.add, () => setState(() => _transformationController.value *= Matrix4.diagonal3Values(1.2, 1.2, 1.0))), _mapBtn(Icons.remove, () => setState(() => _transformationController.value = Matrix4.identity()))])),
                           // Weather advisory panel
-                          Positioned(bottom: 15, left: 15, right: 15, child: Container(padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12), decoration: BoxDecoration(color: Colors.grey.shade800.withOpacity(0.9), borderRadius: BorderRadius.circular(30), border: Border.all(color: Colors.black54)), child: Row(children: [const Text("🌦️", style: TextStyle(fontSize: 18)), const SizedBox(width: 10), Expanded(child: Text(rainAdvisoryText, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)))]))),
+                          Positioned(bottom: 15, left: 15, right: 15, child: Container(padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12), decoration: BoxDecoration(color: Colors.grey.shade800.withValues(alpha: 0.9), borderRadius: BorderRadius.circular(30), border: Border.all(color: Colors.black54)), child: Row(children: [const Text("🌦️", style: TextStyle(fontSize: 18)), const SizedBox(width: 10), Expanded(child: Text(rainAdvisoryText, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)))]))),
                         ],
                       ),
                     ),
@@ -418,7 +416,7 @@ class _SearchRoutesScreenState extends State<SearchRoutesScreen> {
   }
 
   // Reusable helper widgets
-  Widget _navItem(IconData icon, String label, Color color, VoidCallback onTap) => GestureDetector(onTap: onTap, child: Column(mainAxisSize: MainAxisSize.min, children: [Icon(icon, color: color, size: 26), Text(label, style: TextStyle(color: color.withOpacity(0.9), fontSize: 10))]));
+  Widget _navItem(IconData icon, String label, Color color, VoidCallback onTap) => GestureDetector(onTap: onTap, child: Column(mainAxisSize: MainAxisSize.min, children: [Icon(icon, color: color, size: 26), Text(label, style: TextStyle(color: color.withValues(alpha: 0.9), fontSize: 10))]));
   Widget _drawerTile(IconData icon, String title, VoidCallback onTap) => ListTile(leading: Icon(icon, color: _dynamicIconColor), title: Text(title, style: TextStyle(color: _dynamicTextColor)), onTap: onTap);
   Widget _mapBtn(IconData icon, VoidCallback onTap) => GestureDetector(onTap: onTap, child: Container(width: 40, height: 40, margin: const EdgeInsets.only(bottom: 5), alignment: Alignment.center, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black, width: 1.5)), child: Icon(icon, color: Colors.black, size: 24)));
   Widget _buildSettingsField(String label, TextEditingController controller, IconData icon, {bool isPassword = false}) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(label, style: TextStyle(color: isDarkMode ? Colors.white60 : Colors.black54, fontSize: 12)), TextField(controller: controller, obscureText: isPassword, style: TextStyle(color: _dynamicTextColor), decoration: InputDecoration(prefixIcon: Icon(icon, color: Colors.blueAccent, size: 20)))]);

@@ -119,9 +119,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.black.withOpacity(0.8),
+                    // Updated from .withOpacity() to .withValues() for modern standards
+                    Colors.black.withValues(alpha: 0.8),
                     Colors.transparent,
-                    Colors.black.withOpacity(0.9),
+                    Colors.black.withValues(alpha: 0.9),
                   ],
                 ),
               ),
@@ -190,7 +191,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                                   height: 6,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.1),
+                                    // Updated from .withOpacity() to .withValues() for modern standards
+                                    color: Colors.white.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Stack(

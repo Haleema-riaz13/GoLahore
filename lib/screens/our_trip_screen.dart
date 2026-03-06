@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_ui.dart';
-import '../utils/transitions.dart';
 import 'trip_completion_screen.dart';
 
 class OurTripScreen extends StatelessWidget {
@@ -139,7 +137,8 @@ class OurTripScreen extends StatelessWidget {
   Widget _buildSideAlerts() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-      decoration: BoxDecoration(color: Colors.grey[700]!.withOpacity(0.9), borderRadius: BorderRadius.circular(40)),
+      // Updated from .withOpacity() to .withValues() for latest Flutter versions
+      decoration: BoxDecoration(color: Colors.grey[700]!.withValues(alpha: 0.9), borderRadius: BorderRadius.circular(40)),
       child: const Column(children: [
         Icon(Icons.location_on, color: Colors.red, size: 30),
         SizedBox(height: 25),
@@ -155,7 +154,8 @@ class OurTripScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.grey[600]!.withOpacity(0.95),
+        // Updated from .withOpacity() to .withValues() for latest Flutter versions
+        color: Colors.grey[600]!.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(40),
         border: Border.all(color: Colors.black, width: 2),
       ),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_ui.dart';
-import '../utils/transitions.dart';
 
 class HelpSupportScreen extends StatelessWidget {
   final String language; // Holds the current application language state (English, Urdu, or Roman Urdu)
@@ -94,7 +92,8 @@ class HelpSupportScreen extends StatelessWidget {
       ),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: color.withOpacity(0.1), // Subtle color-coded glow for icons
+          // Updated from .withOpacity() to .withValues() for latest Flutter versions
+          backgroundColor: color.withValues(alpha: 0.1),
           child: Icon(icon, color: color, size: 22),
         ),
         title: Text(

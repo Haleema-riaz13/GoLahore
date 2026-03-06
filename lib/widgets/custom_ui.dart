@@ -23,8 +23,9 @@ class GradientOverlay extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              color.withOpacity(opacity),
-              color.withOpacity(endOpacity),
+              // Updated from .withOpacity() to .withValues() for modern standards
+              color.withValues(alpha: opacity),
+              color.withValues(alpha: endOpacity),
             ],
           ),
         ),
@@ -46,9 +47,10 @@ class GlassWrapper extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.12),
+            // Updated from .withOpacity() to .withValues() for modern standards
+            color: Colors.white.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withOpacity(0.2)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
           ),
           child: child,
         ),
@@ -80,7 +82,8 @@ class PrimaryActionButton extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
+            // Updated from .withOpacity() to .withValues() for modern standards
+            color: Colors.blue.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),

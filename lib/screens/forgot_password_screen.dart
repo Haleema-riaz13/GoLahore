@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_ui.dart';
-import '../utils/transitions.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   final String language;
@@ -48,7 +47,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     if (widget.language == "Urdu") {
       title = "پاس ورڈ دوبارہ ترتیب دیں";
-      emailHint = "ای میل یا فون نمبر";
+      emailHint = "ای ای میل یا فون نمبر";
       newPassHint = "نیا پاس ورڈ";
       confirmBtn = "پاس ورڈ تبدیل کریں";
       backToLogin = "لاگ ان پر واپس جائیں";
@@ -81,6 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           // Background layer with the app's signature mosque visual
           Positioned.fill(child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover)),
           // Overlay to darken the background for better text contrast
+          // UPDATED: withValues used inside GradientOverlay for modern Flutter standard
           const GradientOverlay(color: Colors.black, opacity: 0.4, endOpacity: 0.85),
 
           SafeArea(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_ui.dart';
 import '../utils/transitions.dart';
 import 'transport_mode_screen.dart';
 
@@ -126,8 +125,8 @@ class _SelectLanguageScreenState extends State<SelectLanguageScreen> {
         margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          // Change tile background and border color based on selection
-          color: isSelected ? Colors.orangeAccent.withOpacity(0.15) : const Color(0xFF1E1E1E),
+          // Updated from .withOpacity() to .withValues() for modern Flutter standards
+          color: isSelected ? Colors.orangeAccent.withValues(alpha: 0.15) : const Color(0xFF1E1E1E),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? Colors.orangeAccent : Colors.white10,

@@ -41,12 +41,13 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
     // Simulated network delay for route calculation
     await Future.delayed(const Duration(seconds: 2));
 
-    if (mounted) {
-      setState(() {
-        isSearching = false;
-        hasSearched = true;
-      });
-    }
+    // FIX: Check if the widget is still in the tree before calling setState (Async Gap fix)
+    if (!mounted) return;
+
+    setState(() {
+      isSearching = false;
+      hasSearched = true;
+    });
   }
 
   // Opens a dialog for user to enter a promo code
@@ -113,7 +114,8 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
     return ListTile(
       leading: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+        // Updated from .withOpacity() to .withValues() for latest Flutter versions
+        decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
         child: Icon(icon, color: color),
       ),
       title: Text(method, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
@@ -281,7 +283,7 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(color: isSelected ? Colors.white.withOpacity(0.05) : Colors.transparent, borderRadius: BorderRadius.circular(15), border: Border.all(color: isSelected ? const Color(0xFFFFD700) : Colors.white10, width: 1.5)),
+        decoration: BoxDecoration(color: isSelected ? Colors.white.withValues(alpha: 0.05) : Colors.transparent, borderRadius: BorderRadius.circular(15), border: Border.all(color: isSelected ? const Color(0xFFFFD700) : Colors.white10, width: 1.5)),
         child: Row(
           children: [
             Container(padding: const EdgeInsets.all(8), decoration: BoxDecoration(color: isSelected ? const Color(0xFFFFD700) : Colors.white10, borderRadius: BorderRadius.circular(10)), child: Icon(icon, color: isSelected ? Colors.black : Colors.white, size: 24)),
@@ -299,6 +301,7 @@ class _PrivateTransportBookingScreenState extends State<PrivateTransportBookingS
     showModalBottomSheet(
       context: context, backgroundColor: const Color(0xFF1E1E1E), isDismissible: false, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
       builder: (context) {
+        // FIX: Check mounted before navigating after delay to prevent 'Async Gap' errors
         Future.delayed(const Duration(seconds: 3), () {
           if (mounted) {
             Navigator.pop(context);

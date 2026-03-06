@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_ui.dart';
-import '../utils/transitions.dart';
 import 'search_routes_screen.dart';
 
 class TripCompletionScreen extends StatelessWidget {
@@ -33,9 +31,9 @@ class TripCompletionScreen extends StatelessWidget {
             child: Image.asset('assets/mosque.jpg', fit: BoxFit.cover),
           ),
 
-          // Dark Overlay: Applied for better text contrast and to make the summary card "pop"
+          // Dark Overlay: Updated from .withOpacity() to .withValues() for modern standards
           Positioned.fill(
-            child: Container(color: Colors.black.withOpacity(0.6)),
+            child: Container(color: Colors.black.withValues(alpha: 0.6)),
           ),
 
           SafeArea(
@@ -55,7 +53,8 @@ class TripCompletionScreen extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(25),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.15),
+                      // Updated from .withOpacity() to .withValues() for modern standards
+                      color: Colors.white.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(40),
                       border: Border.all(color: Colors.white30),
                     ),

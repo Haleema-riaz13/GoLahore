@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_ui.dart';
-import '../utils/transitions.dart';
 import 'help_support_screen.dart';
 
 class SafetyModeScreen extends StatelessWidget {
@@ -61,7 +59,8 @@ class SafetyModeScreen extends StatelessWidget {
                     width: 180,
                     height: 180,
                     decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(0.2), // Outer glowing ring
+                      // Updated from .withOpacity() to .withValues() for modern Flutter standards
+                      color: Colors.red.withValues(alpha: 0.2), // Outer glowing ring
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.redAccent, width: 2),
                     ),

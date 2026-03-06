@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_ui.dart';
-import '../utils/transitions.dart';
 
 class TravelHistoryScreen extends StatelessWidget {
   final String language; // Stores the current application language state (English, Urdu, or Roman Urdu)
@@ -99,7 +97,8 @@ class TravelHistoryScreen extends StatelessWidget {
         children: [
           // Leading: Visual icon chosen based on the string content of the transport mode
           CircleAvatar(
-            backgroundColor: Colors.blueGrey.withOpacity(0.2),
+            // Updated from .withOpacity() to .withValues() for modern Flutter standards
+            backgroundColor: Colors.blueGrey.withValues(alpha: 0.2),
             child: Icon(
               mode.contains("Metro") ? Icons.directions_bus : Icons.train,
               color: Colors.blueAccent,

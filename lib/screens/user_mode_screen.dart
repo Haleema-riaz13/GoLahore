@@ -66,7 +66,8 @@ class _UserModeScreenState extends State<UserModeScreen> {
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white.withOpacity(0.8), width: 2)
+                        // Updated from .withOpacity() to .withValues() for modern standards
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.8), width: 2)
                     ),
                     child: const CircleAvatar(
                         radius: 45,
@@ -77,7 +78,8 @@ class _UserModeScreenState extends State<UserModeScreen> {
                   const SizedBox(height: 30),
                   Text(title, style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
-                  Text(subtitle, textAlign: TextAlign.center, style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 15)),
+                  // Updated from .withOpacity() to .withValues() for modern standards
+                  Text(subtitle, textAlign: TextAlign.center, style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 15)),
                   const SizedBox(height: 50),
                   _buildModeTile(passengerTitle, passengerSub, Icons.directions_bus, "Passenger"),
                   _buildModeTile(driverTitle, driverSub, Icons.directions_car, "Driver"),
@@ -114,9 +116,10 @@ class _UserModeScreenState extends State<UserModeScreen> {
         margin: const EdgeInsets.only(bottom: 20),
         padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 20),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white.withOpacity(0.1) : const Color(0xFF1E1E1E),
+          // Updated from .withOpacity() to .withValues() for modern standards
+          color: isSelected ? Colors.white.withValues(alpha: 0.1) : const Color(0xFF1E1E1E),
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: isSelected ? Colors.orangeAccent : Colors.white.withOpacity(0.08), width: 2),
+          border: Border.all(color: isSelected ? Colors.orangeAccent : Colors.white.withValues(alpha: 0.08), width: 2),
         ),
         child: Row(
           children: [
@@ -132,7 +135,8 @@ class _UserModeScreenState extends State<UserModeScreen> {
                 children: [
                   Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
                   const SizedBox(height: 4),
-                  Text(sub, style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 12)),
+                  // Updated from .withOpacity() to .withValues() for modern standards
+                  Text(sub, style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 12)),
                 ],
               ),
             ),

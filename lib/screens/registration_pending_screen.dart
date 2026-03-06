@@ -33,7 +33,8 @@ class RegistrationPendingScreen extends StatelessWidget {
                 child: Container(
                   height: 180, width: 180,
                   decoration: BoxDecoration(
-                      color: Colors.orangeAccent.withOpacity(0.05),
+                    // Updated from .withOpacity() to .withValues() for latest Flutter versions
+                      color: Colors.orangeAccent.withValues(alpha: 0.05),
                       shape: BoxShape.circle
                   ),
                   child: Stack(
@@ -56,7 +57,7 @@ class RegistrationPendingScreen extends StatelessWidget {
 
               // --- Success/Pending Title ---
               Text(
-                isUrdu ? "درخواست موصول ہو گئی ہے" : "Application Received!",
+                isUrdu ? "درخواست موصول ہو گئی hai" : "Application Received!",
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black),
               ),
@@ -80,7 +81,8 @@ class RegistrationPendingScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.orangeAccent.withOpacity(0.3),
+                      // Updated from .withOpacity() to .withValues() for latest Flutter versions
+                      color: Colors.orangeAccent.withValues(alpha: 0.3),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
